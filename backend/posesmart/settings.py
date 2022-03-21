@@ -40,6 +40,10 @@ INSTALLED_APPS = [
 
     'accounts',
     'reports',
+
+    'rest_framework',
+    'django_seed',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

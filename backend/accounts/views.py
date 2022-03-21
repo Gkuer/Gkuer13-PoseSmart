@@ -1,12 +1,9 @@
 from django.shortcuts import render
 
-def signup():
+def accounts():
     pass
 
 def login():
-    pass
-
-def signout():
     pass
 
 def time():
