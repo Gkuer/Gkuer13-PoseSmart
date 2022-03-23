@@ -3,7 +3,6 @@ from .serializers import AccountSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from django.contrib.auth import login as auth_login
 from .models import User
 
 @api_view(['POST','DELETE'])
@@ -28,13 +27,6 @@ def accounts(request):
                     "errors": "정상적인 삭제 요청이 아닙니다.(사용자 불일치)"
                 }
                 return Response(data, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['POST'])
-def login(request):
-    if request.method == 'POST':
-        serializer = AccountSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            auth_login(request, serializer.get_user)
 
 @api_view(['GET', 'PUT'])
 def time(request):
