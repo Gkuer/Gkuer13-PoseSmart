@@ -84,7 +84,7 @@ DATABASES = {
     'default' : {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'posesmart',
-        'USER': 'admin',
+        'USER': 'posesmart',
         'PASSWORD': '8888',
         'HOST': '3.38.193.177',
         'PORT': '8888',
