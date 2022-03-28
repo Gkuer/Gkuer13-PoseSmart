@@ -25,8 +25,18 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from "vue";
+import { getReports, getTime, insertReports } from "@/api/user";
+interface Report {
+  date: string;
+  start_time: string;
+  end_time: string;
+  studyTime: string;
+  neck_cnt: string;
+  blink_cnt: string;
+  stretching_cnt: string;
+}
 export default Vue.extend({
   data() {
     return {
@@ -38,25 +48,53 @@ export default Vue.extend({
           text: "날짜",
           value: "date",
         },
-        { text: "시작 시간", value: "startTime" },
-        { text: "종료 시간 ", value: "endTime" },
-        { text: "공부 시간", value: "studyTime" },
-        { text: "거북목 횟수", value: "neckCount" },
-        { text: "깜빡임 횟수", value: "eyeCount" },
-        { text: "스트레칭 횟수", value: "stretchCount" },
+        { text: "시작 시간", value: "start_time" },
+        { text: "종료 시간 ", value: "end_time" },
+        { text: "공부 시간", value: "study_time" },
+        { text: "거북목 횟수", value: "neck_cnt" },
+        { text: "깜빡임 횟수", value: "blink_cnt" },
+        { text: "스트레칭 횟수", value: "stretching_cnt" },
       ],
-      results: [
-        {
-          date: "22.03.21",
-          startTime: "11:40",
-          endTime: "14:10",
-          studyTime: "2:30",
-          neckCount: 54,
-          eyeCount: 333,
-          stretchCount: 22,
-        },
-      ],
+      results: [],
     };
+  },
+  async created() {
+    try {
+      const data = await getReports();
+      const res = data.data;
+      res.forEach((data: any) => {
+        const start_time: string = data.start_time;
+        const end_time: string = data.end_time;
+        const duringMsec: number =
+          Date.parse(end_time) - Date.parse(start_time);
+        const duringSec: number = duringMsec / 1000;
+        const duringMin: number = duringMsec / 1000 / 60;
+        const duringHour: number = duringMsec / 1000 / 60 / 60;
+        const item = {
+          start_time:
+            data.start_time.substring(0, 10) +
+            " " +
+            data.start_time.substring(11, 19),
+          end_time:
+            data.end_time.substring(0, 10) +
+            " " +
+            data.end_time.substring(11, 19),
+          neck_cnt: data.neck_cnt,
+          blink_cnt: data.blink_cnt,
+          stretching_cnt: data.stretching_cnt,
+          date: data.start_time.substring(0, 10),
+          study_time:
+            duringHour.toFixed(0) +
+            ":" +
+            duringMin.toFixed(0) +
+            ":" +
+            duringSec.toFixed(0),
+        } as never;
+        this.results.push(item);
+      });
+    } catch (e) {
+      console.log(e);
+    }
   },
 });
 </script>

@@ -116,27 +116,32 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { registerUser, loginUser, getTime, getReports } from "@/api/user";
+import { registerUser, loginUser } from "@/api/user";
 export default Vue.extend({
   name: "HomePage",
   methods: {
-    // async register(): Promise<void> {
-    //   console.log({
-    //     username: this.registerId,
-    //     password: this.registerPassword,
-    //   });
-    //   console.log("register");
-    //   try {
-    //     await registerUser({
-    //       username: this.registerId,
-    //       password: this.registerPassword,
-    //     });
-    //     console.log("가입성공");
-    //   } catch (error) {
-    //     console.log(error);
-    //     alert("로그인 불가");
-    //   }
-    // },
+    async register(): Promise<void> {
+      console.log({
+        username: this.registerId,
+        password: this.registerPassword,
+      });
+      let regEmail =
+        /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+
+      if (regEmail.test(this.registerId) === false) {
+        alert("이메일 형식으로 입력해주세요");
+        return;
+      }
+      try {
+        await registerUser({
+          username: this.registerId,
+          password: this.registerPassword,
+        });
+        location.reload();
+      } catch (error) {
+        alert("로그인 불가");
+      }
+    },
     setMode(val: string): void {
       this.mode = val;
     },
@@ -150,8 +155,7 @@ export default Vue.extend({
         sessionStorage.setItem("accessToken", data.data.access);
         this.$router.push({ name: "LoginHome" });
       } catch (error) {
-        console.log("error");
-        console.log(error);
+        alert("로그인 할 수 없습니다. 아이디나 비밀번호를 확인해주세요.");
       }
     },
   },
@@ -164,9 +168,6 @@ export default Vue.extend({
       registerPassword: "",
     };
   },
-  // components: {
-  //   HelloWorld,
-  // },
 });
 </script>
 <style scoped>

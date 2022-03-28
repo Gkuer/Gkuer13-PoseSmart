@@ -8,9 +8,9 @@ interface User {
   password: string;
 }
 interface Time {
-  blink_time: string;
-  neck_time: string;
-  stretching_time: string;
+  blink_time: number;
+  neck_time: number;
+  stretching_time: number;
 }
 
 async function registerUser(user: User): Promise<void> {
@@ -26,7 +26,7 @@ async function loginUser(user: User): Promise<AxiosResponse<any, any>> {
   return await api.post(`/accounts/login/`, JSON.stringify(user));
 }
 
-async function getTime(): Promise<Time> {
+async function getTime(): Promise<any> {
   const loginApi = loginApiInstance();
   return await loginApi.get(`/accounts/time/`);
 }
@@ -38,7 +38,7 @@ async function modifyTime(time: Time): Promise<void> {
 
 async function getReports(): Promise<any> {
   const loginApi = loginApiInstance();
-  await loginApi.get(`/reports/`);
+  return await loginApi.get(`/reports/`);
 }
 
 async function insertReports(reports: any): Promise<any> {

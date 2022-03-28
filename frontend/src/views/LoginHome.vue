@@ -118,21 +118,48 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { getTime, modifyTime } from "@/api/user";
 export default Vue.extend({
   methods: {
-    click(val: string): void {
+    async click(val: string): Promise<void> {
       if (val === "detect") {
         this.$router.push({ name: "DectectPose" });
       } else if (val === "result") {
         this.$router.push({ name: "UserResult" });
       } else if (val === "alarm") {
+        const data = await getTime();
+        console.log(data.data);
+        this.select[0].state = data.data.neck_time + "초";
+        this.select[0].val = data.data.neck_time;
+        this.select[1].state = data.data.blink_time + "초";
+        this.select[1].val = data.data.blink_time;
+        // console.log(data.data);
+        const convertTime = data.data.stretching_time / 60 / 60;
+        console.log(data.data.stretching_time);
+        console.log(convertTime);
+        if (convertTime === 0.5) {
+          this.selectStretch.state = 30 + "분";
+        } else {
+          this.selectStretch.state = convertTime + "시간";
+        }
+        this.selectStretch.val = convertTime;
         this.dialog = !this.dialog;
       }
     },
-    setting(): void {
+    async setting(): Promise<void> {
       console.log(this.select[0].val);
       console.log(this.select[1].val);
       console.log(this.selectStretch.val);
+      try {
+        const req = {
+          neck_time: this.select[0].val,
+          stretching_time: this.selectStretch.val * 60 * 60,
+          blink_time: this.select[1].val,
+        };
+        await modifyTime(req);
+      } catch (e) {
+        alert("에러");
+      }
       this.dialog = !this.dialog;
     },
   },
@@ -140,23 +167,24 @@ export default Vue.extend({
     return {
       dialog: false,
       select: [
-        { state: "20분", val: "20" },
-        { state: "20분", val: "20" },
+        { state: "10초", val: 10 },
+        { state: "20초", val: 20 },
       ],
       items: [
-        { state: "20분", val: "20" },
-        { state: "15분", val: "15" },
-        { state: "10분", val: "10" },
+        { state: "20초", val: 20 },
+        { state: "15초", val: 15 },
+        { state: "10초", val: 10 },
       ],
       selectStretch: {
         state: "3시간",
-        val: "3",
+        val: 3,
       },
       stretchItems: [
-        { state: "3시간", val: "3" },
-        { state: "2시간", val: "2" },
-        { state: "1시간", val: "1" },
-        { state: "30분", val: "0.5" },
+        { state: "5시간", val: 5 },
+        { state: "3시간", val: 3 },
+        { state: "2시간", val: 2 },
+        { state: "1시간", val: 1 },
+        { state: "30분", val: 0.5 },
       ],
     };
   },
