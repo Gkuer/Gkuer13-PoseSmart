@@ -28,7 +28,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
 
     # Detections
-    # path('detections/', include('detections.urls')),
+    path('detections/', include('detections.urls')),
 
     # Reports
     path('reports/', include('reports.urls')),
