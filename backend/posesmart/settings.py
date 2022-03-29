@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'accounts',
     'reports',
+    'detections',
 
     'rest_framework',
     'django_seed',
