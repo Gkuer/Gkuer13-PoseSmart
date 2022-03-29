@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
-import check_neck
+import numpy as np
+from .checkpose import check_neck
 
 def init_check_neck(request):
     # 세션에서 저장된 정보 가져오기?

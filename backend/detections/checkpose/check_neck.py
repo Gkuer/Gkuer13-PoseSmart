@@ -1,7 +1,6 @@
-import cv2 as cv
 import numpy as np
 
-import pose_estimation
+from . import pose_estimation
 
 POSE_ESTIMATION = pose_estimation.build_model()
 

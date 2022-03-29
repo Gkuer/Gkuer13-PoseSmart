@@ -100,7 +100,7 @@ def stageT_block(x, num_p, stage, branch):
 
 
 
-weights_path = "model/model.h5" # orginal weights converted from caffe
+weights_path = "detections/model/model.h5" # orginal weights converted from caffe
 
 def build_model():
   input_shape = (None,None,3)
