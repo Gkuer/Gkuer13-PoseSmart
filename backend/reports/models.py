@@ -8,4 +8,5 @@ class Report(models.Model):
     stretching_cnt = models.IntegerField()
     start_time = models.CharField(max_length=50)
     end_time = models.CharField(max_length=50)
+    study_time = models.CharField(max_length=200,null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

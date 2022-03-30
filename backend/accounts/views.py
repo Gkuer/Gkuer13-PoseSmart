@@ -22,11 +22,12 @@ def accounts(request):
 def time(request):
     user = get_object_or_404(get_user_model(), pk=request.user.pk)
     if request.method == 'GET':
-        blink_time, neck_time, stretching_time = user.blink_time, user.neck_time, user.stretching_time
+        blink_time, neck_time, stretching_time, alarm_sound = user.blink_time, user.neck_time, user.stretching_time, user.alarm_sound
         data = {
             'blink_time': blink_time,
             'neck_time': neck_time,
-            'stretching_time': stretching_time
+            'stretching_time': stretching_time,
+            'alarm_sound': alarm_sound,
         }
         return Response(data, status=status.HTTP_200_OK)
 
