@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-&pq!g+4=q=^g6gn*z%cj5ghf-h2c2v2da9ej&oxlt8bcjh(v#t'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -86,14 +86,23 @@ WSGI_APPLICATION = 'posesmart.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# ===========Deploy Database===========
+# DATABASES = {
+#     'default' : {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'posesmart',
+#         'USER': 'posesmart',
+#         'PASSWORD': '8888',
+#         'HOST': '3.38.193.177',
+#         'PORT': '8888',
+#     }
+# }
+
+# ===========Local Database===========
 DATABASES = {
-    'default' : {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'posesmart',
-        'USER': 'posesmart',
-        'PASSWORD': '8888',
-        'HOST': '3.38.193.177',
-        'PORT': '8888',
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
