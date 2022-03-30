@@ -1,6 +1,5 @@
 import pytest
 from .commons import Authentication
-import json
 
 @pytest.mark.django_db
 def test_get_time(client):
