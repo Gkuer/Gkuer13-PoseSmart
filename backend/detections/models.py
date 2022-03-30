@@ -5,6 +5,6 @@ class Detection(models.Model):
     blob_data = models.TextField()
     face_mean = models.FloatField(default=0.0)
     nose_mean = models.FloatField(default=0.0)
-    face = models.TextField(default=None)
-    nose_to_center = models.TextField(default=None)
+    face = models.TextField(default=None,null=True, blank=True)
+    nose_to_center = models.TextField(default=None,null=True, blank=True)
     cnt = models.IntegerField(default=0)

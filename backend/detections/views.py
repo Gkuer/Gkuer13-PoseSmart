@@ -13,10 +13,10 @@ def check_neck(request):
 
         # Common
         image_blob = serializer.data.get("blob_data")
+        frame = np.fromstring(image_blob, sep='\t')
         cnt = serializer.data.get('cnt')
         face_string = serializer.data.get("face")
         nose_to_center_string = serializer.data.get('nose_to_center')
-        frame = np.fromstring(image_blob, sep='\t')
 
         # Measurement
         face_mean = serializer.data.get('face_mean')

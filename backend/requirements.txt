@@ -26,9 +26,11 @@ grpcio==1.44.0
 h5py==3.6.0
 idna==3.3
 importlib-metadata==4.11.3
+inflection==0.3.1
 iniconfig==1.1.1
 keras==2.8.0
 Keras-Preprocessing==1.1.2
+lazy-object-proxy==1.7.1
 libclang==13.0.0
 Markdown==3.3.6
 mysqlclient==2.1.0
@@ -44,8 +46,13 @@ pyasn1-modules==0.2.8
 pycparser==2.21
 PyJWT==1.7.1
 pyparsing==3.0.7
-pytest==7.1.1
+pytest==6.2.5
+pytest-assert-utils==0.3.0
+pytest-common-subject==1.0.5
 pytest-django==4.5.2
+pytest-drf==1.1.2
+pytest-fixture-order==0.1.3
+pytest-lambda==1.2.5
 python-dateutil==2.8.2
 python3-openid==3.2.0
 pytz==2022.1
@@ -61,6 +68,7 @@ tensorflow==2.8.0
 tensorflow-io-gcs-filesystem==0.24.0
 termcolor==1.1.0
 tf-estimator-nightly==2.8.0.dev2021122109
+toml==0.10.2
 tomli==2.0.1
 toposort==1.7
 typing_extensions==4.1.1
