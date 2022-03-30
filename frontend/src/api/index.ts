@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 
-const API_BASE_URL = "http://3.38.193.177:8000/";
+const API_BASE_URL = "http://j6b201.p.ssafy.io:8000/api";
 
 function apiInstance(): AxiosInstance {
   const instance = axios.create({

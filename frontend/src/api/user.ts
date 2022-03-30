@@ -46,6 +46,11 @@ async function insertReports(reports: any): Promise<any> {
   await loginApi.post(`/reports/`, JSON.stringify(reports));
 }
 
+async function getDetect(data: any) {
+  const loginApi = loginApiInstance();
+  await loginApi.post(`/detections/`, JSON.stringify(data));
+}
+
 export {
   registerUser,
   deleteUser,
@@ -54,4 +59,5 @@ export {
   modifyTime,
   getReports,
   insertReports,
+  getDetect,
 };

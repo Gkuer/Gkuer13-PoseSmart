@@ -35,14 +35,16 @@
             ><img class="icon" src="@/assets/exit.png" alt="" @click="exit()"
           /></v-col>
         </v-row>
+        <v-button @click="takePhoto"> click </v-button>
       </div>
     </div>
+    <!-- <a href="#">download</a> -->
   </div>
 </template>
 
 <script>
 import Vue from "vue";
-import { insertReports } from "@/api/user";
+import { insertReports, getDetect } from "@/api/user";
 export default Vue.extend({
   data() {
     return {
@@ -57,6 +59,7 @@ export default Vue.extend({
       stretching_cnt: 0,
       start_time: "",
       isStart: false,
+      imageCapture: {},
     };
   },
   methods: {
@@ -103,10 +106,66 @@ export default Vue.extend({
         .then((mediaStream) => {
           this.localStream = mediaStream;
           this.localVideo.srcObject = mediaStream;
+          const track = mediaStream.getVideoTracks()[0];
+          this.imageCapture = new ImageCapture(track);
         })
         .catch((e) => console.log(e));
       this.playing = true;
     },
+    takePhoto() {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      let audio = new Audio(require("../assets/거북목가람.mp3"));
+      audio.play();
+      let data = "";
+      this.imageCapture
+        .takePhoto()
+        .then((blob) => {
+          console.log(blob.text());
+          const myFile = new File([blob], "image.jpeg", {
+            type: blob.type,
+          });
+          console.log(myFile);
+          // this.downloadFiles(blob, "test.png", "image/png");
+          data = blob;
+        })
+        .then(() => {
+          console.log(data, "data!!!!!!!!");
+          let reader = new FileReader();
+          reader.onload = function () {
+            // console.log(reader.result);
+            try {
+              // getDetect({
+              //   blob_data: reader.result,
+              //   nose_to_center: "",
+              //   face_mean: 0.0,
+              //   nose_mean: 0.0,
+              //   cnt: 0,
+              //   face: "",
+              // });
+            } catch (error) {
+              console.log(error);
+            }
+          };
+          reader.readAsText(data);
+        });
+    },
+    // downloadFiles(data, file_name, file_type) {
+    //   var file = new Blob([data], { type: file_type });
+    //   if (window.navigator.msSaveOrOpenBlob)
+    //     window.navigator.msSaveOrOpenBlob(file, file_name);
+    //   else {
+    //     var a = document.createElement("a"),
+    //       url = URL.createObjectURL(file);
+    //     a.href = url;
+    //     a.download = file_name;
+    //     document.body.appendChild(a);
+    //     a.click();
+    //     setTimeout(function () {
+    //       document.body.removeChild(a);
+    //       window.URL.revokeObjectURL(url);
+    //     }, 0);
+    //   }
+    // },
   },
   // mounted() {
   //   this.init();

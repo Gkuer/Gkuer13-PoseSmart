@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { getReports, getTime, insertReports } from "@/api/user";
+import { getReports } from "@/api/user";
 interface Report {
   date: string;
   start_time: string;
@@ -102,7 +102,7 @@ export default Vue.extend({
 <style scoped>
 .table {
   position: absolute;
-  top: 45%;
+  top: 55%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 5rem;

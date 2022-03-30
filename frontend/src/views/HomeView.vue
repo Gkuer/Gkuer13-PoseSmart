@@ -8,7 +8,7 @@
         <div class="content">
           <v-row class="mt-15"></v-row>
           <v-row class="mt-15"></v-row>
-          <v-row :style="{ marginLeft: '200px' }">SmartPose</v-row>
+          <v-row :style="{ marginLeft: '200px' }">PoseSmart</v-row>
           <v-row class="mt-15"></v-row>
           <v-row class="mt-15"></v-row>
           <v-row class="mt-15"></v-row>
@@ -45,7 +45,7 @@
         </div>
       </div>
       <div v-if="mode === 'login'">
-        <div class="logo">SmartPose</div>
+        <div class="logo">PoseSmart</div>
         <div class="content">
           <v-row class="mt-15"></v-row>
           <v-row :style="{ marginLeft: '250px' }">로그인</v-row>
@@ -81,7 +81,7 @@
         </div>
       </div>
       <div v-if="mode === 'register'">
-        <div class="logo">SmartPose</div>
+        <div class="logo">PoseSmart</div>
         <div class="content">
           <v-row class="mt-15"></v-row>
           <v-row :style="{ marginLeft: '230px' }">회원 가입</v-row>

@@ -4,7 +4,7 @@
       class="loginImg"
       :style="{ backgroundImage: `url(${require('@/assets/main.jpg')})` }"
     >
-      <div class="logo">SmartPose</div>
+      <div class="logo">PoseSmart</div>
       <div class="content" :style="{ top: '55%', fontSize: '3rem' }">
         <div>AI 거북목 탐지 & 눈 깜빡임 감지</div>
         <div :style="{ marginTop: '130px' }">
@@ -102,6 +102,22 @@
                   single-line
                 ></v-select>
               </v-col>
+              <v-col cols="6">
+                <v-subheader> 알림음 설정 </v-subheader>
+              </v-col>
+
+              <v-col cols="6">
+                <v-select
+                  v-model="selectAlarm"
+                  :items="alarmItems"
+                  item-text="state"
+                  item-value="val"
+                  label="Select"
+                  persistent-hint
+                  return-object
+                  single-line
+                ></v-select>
+              </v-col>
             </v-row>
           </v-container>
           <v-divider></v-divider>
@@ -133,7 +149,8 @@ export default Vue.extend({
         this.select[0].val = data.data.neck_time;
         this.select[1].state = data.data.blink_time + "초";
         this.select[1].val = data.data.blink_time;
-        // console.log(data.data);
+        this.selectAlarm = this.alarmItems[data.data.alarm_sound - 1];
+        console.log(this.selectAlarm);
         const convertTime = data.data.stretching_time / 60 / 60;
         console.log(data.data.stretching_time);
         console.log(convertTime);
@@ -150,11 +167,13 @@ export default Vue.extend({
       console.log(this.select[0].val);
       console.log(this.select[1].val);
       console.log(this.selectStretch.val);
+      console.log(this.selectAlarm.val);
       try {
         const req = {
           neck_time: this.select[0].val,
           stretching_time: this.selectStretch.val * 60 * 60,
           blink_time: this.select[1].val,
+          alarm_sound: this.selectAlarm.val,
         };
         await modifyTime(req);
       } catch (e) {
@@ -166,8 +185,9 @@ export default Vue.extend({
   data() {
     return {
       dialog: false,
+      selectAlarm: { state: "남자 성인 목소리", val: 1 },
       select: [
-        { state: "10초", val: 10 },
+        { state: "20초", val: 20 },
         { state: "20초", val: 20 },
       ],
       items: [
@@ -185,6 +205,12 @@ export default Vue.extend({
         { state: "2시간", val: 2 },
         { state: "1시간", val: 1 },
         { state: "30분", val: 0.5 },
+      ],
+      alarmItems: [
+        { state: "남자 성인 목소리", val: 1 },
+        { state: "여자 성인 목소리", val: 2 },
+        { state: "남자 아이 목소리", val: 3 },
+        { state: "여자 아이 목소리", val: 4 },
       ],
     };
   },
