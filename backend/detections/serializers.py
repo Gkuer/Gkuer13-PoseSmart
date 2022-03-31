@@ -6,4 +6,4 @@ class InitCheckNeckSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Detection
-        fields = ('blob_data', 'face', 'nose_to_center', 'cnt', 'face_mean', 'nose_mean')
+        fields = ('blob_data', 'face_x', 'face_y', 'nose_to_center', 'cnt', 'face_x_mean', 'face_y_mean', 'nose_mean')
