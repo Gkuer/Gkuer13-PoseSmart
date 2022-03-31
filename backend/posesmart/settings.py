@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django_seed',
     'django_extensions',
     'corsheaders',
-    'keras',
+
     'numpy',
 ]
 

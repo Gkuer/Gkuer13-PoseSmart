@@ -6,10 +6,13 @@ from .serializers import InitCheckNeckSerializer
 from rest_framework.decorators import api_view
 import numpy as np
 import dlib
-
-
+import base64
+import io
+from PIL import Image
+import cv2 as cv
 @api_view(['POST'])
 def check_neck(request):
+
     # JPG TEST 용 (landmark 정상적으로 프린트됨)
     # image = "detections/model/face.jpg"
     # landmark_list = face_landmark.get_landmark(image)
@@ -17,111 +20,118 @@ def check_neck(request):
     
     serializer = InitCheckNeckSerializer(data=request.data)
     
-    if serializer.is_valid(raise_exception=True):
-        # TODO 여기 print 안되고, 400 ERROR
-        print('data:', request.data)
+    if serializer.is_valid():
+        print('passed')
         # Common
-        image_blob = serializer.data.get("blob_data")
-        frame = np.fromstring(image_blob, sep='\t')
-        print(frame)
-
-        cnt = serializer.data.get('cnt')
-        face_x_string = serializer.data.get("face_x")
-        face_y_string = serializer.data.get("face_y")
-        nose_to_center_string = serializer.data.get('nose_to_center')
-
-        # Measurement
-        face_x_mean = serializer.data.get('face_x_mean')
-        face_y_mean = serializer.data.get('face_y_mean')
-        nose_mean = serializer.data.get('nose_mean')
-
-        # face landmark list
-        landmark_list = face_landmark.get_landmark(frame)
+        image_blob = base64.encodebytes(serializer.data.get("blob_data"))
+        frame = base64.b64decode(image_blob.decode('utf-8'))
+        dataBytesIO = io.BytesIO(frame)
+        image = Image.open(dataBytesIO)
+        decoded_frame = cv.cvtColor(np.array(image), cv.COLOR_BGR2RGB)
+        landmark_list = face_landmark.get_landmark(decoded_frame)
         print(landmark_list)
 
-        left_eye = landmark_list[42:48]
-        right_eye = landmark_list[36:42]
+        return True
 
-        # x
-        right_cheek_x = sum(list(map(lambda x: x[0], landmark_list[0:4]))) / 4
-        left_cheek_x = sum(list(map(lambda x: x[0], landmark_list[13:17]))) / 4
-        get_face_x = left_cheek_x - right_cheek_x
+        # frame = np.fromstring(image_blob, sep='\t')
+
+        # cnt = serializer.data.get('cnt')
+        # face_x_string = serializer.data.get("face_x")
+        # face_y_string = serializer.data.get("face_y")
+        # nose_to_center_string = serializer.data.get('nose_to_center')
+
+        # # Measurement
+        # face_x_mean = serializer.data.get('face_x_mean')
+        # face_y_mean = serializer.data.get('face_y_mean')
+        # nose_mean = serializer.data.get('nose_mean')
+
+        # # face landmark list
+        # landmark_list = face_landmark.get_landmark(image_blob)
+        # # print(landmark_list)
+
+        # left_eye = landmark_list[42:48]
+        # right_eye = landmark_list[36:42]
+
+        # # x
+        # right_cheek_x = sum(list(map(lambda x: x[0], landmark_list[0:4]))) / 4
+        # left_cheek_x = sum(list(map(lambda x: x[0], landmark_list[13:17]))) / 4
+        # get_face_x = left_cheek_x - right_cheek_x
 
 
-        dist_nose_to_face_center = abs(nose_y - get_face_y)
+        # dist_nose_to_face_center = abs(nose_y - get_face_y)
 
-        # y
-        right_eye_y = sum(list(map(lambda x: x[1], right_eye))) / 6
-        left_eye_y = sum(list(map(lambda x: x[1], left_eye))) / 6
-        nose_y = sum(list(map(lambda x: x[1], landmark_list[31:36]))) / 5
+        # # y
+        # right_eye_y = sum(list(map(lambda x: x[1], right_eye))) / 6
+        # left_eye_y = sum(list(map(lambda x: x[1], left_eye))) / 6
+        # nose_y = sum(list(map(lambda x: x[1], landmark_list[31:36]))) / 5
 
-        get_face_y = (right_eye_y + left_eye_y + nose_y) / 3
+        # get_face_y = (right_eye_y + left_eye_y + nose_y) / 3
 
 
-        if cnt <= 4:
-            if face_y_string and nose_to_center_string and face_x_string:
-                face_x = face_x_string[1:-1].split(",")
-                face_y = face_y_string[1:-1].split(",")
-                nose_to_center = nose_to_center_string[1:-1].split(",")
-            else:
-                # 기준 값
-                face_x = []  # 얼굴 폭
-                face_y = []  # 얼굴 y축 평균 좌표값
-                nose_to_center = []  # 코와 얼굴 중간 간의 거리
+        # if cnt <= 4:
+        #     if face_y_string and nose_to_center_string and face_x_string:
+        #         face_x = face_x_string[1:-1].split(",")
+        #         face_y = face_y_string[1:-1].split(",")
+        #         nose_to_center = nose_to_center_string[1:-1].split(",")
+        #     else:
+        #         # 기준 값
+        #         face_x = []  # 얼굴 폭
+        #         face_y = []  # 얼굴 y축 평균 좌표값
+        #         nose_to_center = []  # 코와 얼굴 중간 간의 거리
             
-            face_x.append(get_face_x)
-            face_y.append(get_face_y)
-            nose_to_center.append(dist_nose_to_face_center)
+        #     face_x.append(get_face_x)
+        #     face_y.append(get_face_y)
+        #     nose_to_center.append(dist_nose_to_face_center)
 
-            cnt += 1
-            data = {
-                'face_x': face_x,
-                'face_y': face_y,
-                'nose_to_center': nose_to_center,
-                'cnt': cnt,
-            }
+        #     cnt += 1
+        #     data = {
+        #         'face_x': face_x,
+        #         'face_y': face_y,
+        #         'nose_to_center': nose_to_center,
+        #         'cnt': cnt,
+        #     }
 
-            if cnt == 4:
+        #     if cnt == 4:
 
-                face_x_mean = np.mean(list(map(float, face_x)))
-                face_y_mean = np.mean(list(map(float, face_y)))
-                nose_mean = np.mean(list(map(float, nose_to_center)))
+        #         face_x_mean = np.mean(list(map(float, face_x)))
+        #         face_y_mean = np.mean(list(map(float, face_y)))
+        #         nose_mean = np.mean(list(map(float, nose_to_center)))
 
-                data[face_x_mean] = face_x_mean
-                data[face_y_mean] = face_y_mean
-                data[nose_mean] = nose_mean
+        #         data[face_x_mean] = face_x_mean
+        #         data[face_y_mean] = face_y_mean
+        #         data[nose_mean] = nose_mean
 
-            return Response(data, status=status.HTTP_200_OK)
+        #     return Response(data, status=status.HTTP_200_OK)
 
-        else:
+        # else:
             
-            right_eye_x = sum(list(map(lambda x: x[0], right_eye))) / 6
-            left_eye_x = sum(list(map(lambda x: x[0], left_eye))) / 6
+        #     right_eye_x = sum(list(map(lambda x: x[0], right_eye))) / 6
+        #     left_eye_x = sum(list(map(lambda x: x[0], left_eye))) / 6
 
-            # 얼굴이 내려가거나, 가까워 지는 경우
-            y_result = True
-            if get_face_y > face_y_mean + nose_mean or face_x_mean * 1.07 <= get_face_x:
-                y_result = False
+        #     # 얼굴이 내려가거나, 가까워 지는 경우
+        #     y_result = True
+        #     if get_face_y > face_y_mean + nose_mean or face_x_mean * 1.07 <= get_face_x:
+        #         y_result = False
 
-            # 기운 자세의 경우
-            x_result = True
-            angle = 90 + (np.arctan2(left_eye_y - right_eye_y , left_eye_x - right_eye_x) * 180) / np.pi
-            if angle > 100 or angle < 80:
-                x_result = False
+        #     # 기운 자세의 경우
+        #     x_result = True
+        #     angle = 90 + (np.arctan2(left_eye_y - right_eye_y , left_eye_x - right_eye_x) * 180) / np.pi
+        #     if angle > 100 or angle < 80:
+        #         x_result = False
 
-            data = {
-                'y_result': y_result,
-                'x_result': x_result
-            }
+        #     data = {
+        #         'y_result': y_result,
+        #         'x_result': x_result
+        #     }
 
-            return Response(data, status=status.HTTP_200_OK)
+            # return Response(data, status=status.HTTP_200_OK)
 
 
 
 
 # def check_blink(request):
 #     EYE_AR_THRESH = 0.27
-#     EYE_AR_CONSEC_FRAMES = 3
+#     EYE_AR_CONSEC_FRAMES = 2
 
 #     # TODO MODEL에 추가해야함
 #     COUNTER = 0
