@@ -5,25 +5,25 @@ import dlib
 import numpy as np
 import argparse
 from scipy.spatial import distance as dist
-
+import cv2 as cv
 data_file = "detections/model/shape_predictor_68_face_landmarks.dat"
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor(data_file)
 
 # return face landmarks
 def get_landmark(frame):
-    frame = dlib.load_rgb_image(frame)
+    
+    # frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
     face_detector = detector(frame, 0)
 
     for face in face_detector:
         shape = predictor(frame, face)
+        # psrint(shape.parts())
+        landmark_list = []
+        for p in shape.parts():
+            landmark_list.append([p.x, p.y])
 
-    landmark_list = []
-
-    for p in shape.parts():
-        landmark_list.append([p.x, p.y])
-
-    return landmark_list
+        return landmark_list
             
 # return EAR
 def eye_ratio(eye):
