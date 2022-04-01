@@ -2,7 +2,6 @@ from django.db import models
 
 # Create your models here.
 class Detection(models.Model):
-    # blob_data = models.TextField(blank=True, upload_to = 'images/')
     blob_data = models.TextField()
     face_x_mean = models.FloatField(default=0.0)
     face_y_mean = models.FloatField(default=0.0)
