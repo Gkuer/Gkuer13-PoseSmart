@@ -116,6 +116,16 @@ def check_neck(request):
                     # print('가까이', face_x_mean * 1.1 <= get_face_x)
                     y_result = False
 
+                # [예외처리] : 얼굴이 멀리 가면 거북목이 아니라는 가정 하에 거북목 False 풀어주기
+                close = face_x_mean * 1.05 <= get_face_x
+                down = get_face_y > (face_y_mean + nose_mean) * 1.02
+
+                if close or down:
+
+                    y_result = False
+                    if down and face_x_mean * 0.85 > get_face_x:
+                        y_result = True
+
                 # 기운 자세의 경우
                 x_result = True
                 angle = 90 + (np.arctan2(left_eye_y - right_eye_y, left_eye_x - right_eye_x) * 180) / np.pi
