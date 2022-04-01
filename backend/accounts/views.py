@@ -14,6 +14,7 @@ def accounts(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     elif request.method == 'DELETE':
+        print(request)
         user = get_object_or_404(get_user_model(), pk=request.user.pk)
         user.delete()
         return Response({"message" : "정상적으로 삭제되었습니다."}, status=status.HTTP_204_NO_CONTENT)

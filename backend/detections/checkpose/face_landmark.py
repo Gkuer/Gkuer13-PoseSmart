@@ -12,8 +12,6 @@ predictor = dlib.shape_predictor(data_file)
 
 # return face landmarks
 def get_landmark(frame):
-    
-    # frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
     face_detector = detector(frame, 0)
 
     for face in face_detector:

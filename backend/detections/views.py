@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
 from .checkpose import face_landmark
-from .serializers import InitCheckNeckSerializer
+from .serializers import InitCheckNeckSerializer,CheckBlinkSerializer
 from rest_framework.decorators import api_view
 import numpy as np
 import dlib
@@ -19,6 +19,7 @@ def check_neck(request):
     # print(landmark_list)
     # print("request data: ", type(request.data['face_x']))
     serializer = InitCheckNeckSerializer(data=request.data)
+
     print(type(request.data['face_x']))
     print(type(request.data['face_x_mean']))
     if serializer.is_valid(raise_exception=True):
@@ -28,7 +29,6 @@ def check_neck(request):
         image_data = base64.b64decode(image_string)  
         nparr = np.frombuffer(image_data, np.uint8)
         img = cv.imdecode(nparr, cv.IMREAD_COLOR)
-
 
         cnt = serializer.data.get('cnt')
         face_x_string = serializer.data.get("face_x")
@@ -128,42 +128,49 @@ def check_neck(request):
             print('over 4', data)
             return Response(data, status=status.HTTP_200_OK)
 
-
-
-
 def check_blink(request):
     EYE_AR_THRESH = 0.27
     EYE_AR_CONSEC_FRAMES = 2
 
-    # TODO MODEL에 추가해야함
-    COUNTER = 0
-    TOTAL = 0
+    serializer = CheckBlinkSerializer(data=request.data)
 
-    image_string = serializer.data.get("blob_data")[22:]
-    image_data = base64.b64decode(image_string)  
-    nparr = np.frombuffer(image_data, np.uint8)
-    img = cv.imdecode(nparr, cv.IMREAD_COLOR)
+    if serializer.is_valid(raise_exception=True):
+        count = serializer.data.get("count")
+        total = serializer.data.get("total")
+        time = serializer.data.get("time")
 
-    landmark_list = face_landmark.get_landmark(img)
-    left_eye = landmark_list[42:48]
-    right_eye = landmark_list[36:42]
+        # Image Data Process
+        image_string = serializer.data.get("blob_data")[22:]
+        image_data = base64.b64decode(image_string)
+        nparr = np.frombuffer(image_data, np.uint8)
+        img = cv.imdecode(nparr, cv.IMREAD_COLOR)
 
-    # 눈깜박임
-    leftEAR = face_landmark.eye_ratio(left_eye)
-    rightEAR = face_landmark.eye_ratio(right_eye)
+        landmark_list = face_landmark.get_landmark(img)
+        left_eye = landmark_list[42:48]
+        right_eye = landmark_list[36:42]
 
-    ear = (leftEAR + rightEAR) / 2.0
+        # 눈깜박임
+        leftEAR = face_landmark.eye_ratio(left_eye)
+        rightEAR = face_landmark.eye_ratio(right_eye)
 
+        ear = (leftEAR + rightEAR) / 2.0
 
-    if ear < EYE_AR_THRESH:
-        COUNTER += 1
+        res = False
+        if ear < EYE_AR_THRESH:
+            count += 1
 
-    else:
-        if COUNTER >= EYE_AR_CONSEC_FRAMES:
-            TOTAL += 1
-            print('깜빡', TOTAL)
-        COUNTER = 0
+        else:
+            if count >= EYE_AR_CONSEC_FRAMES:
+                total += 1
+                res = True
+            count = 0
 
+        time += 1
+        data = {
+            "total": total,
+            "count": count,
+            "res": res,
+            "time": time,
+        }
 
-
-
+        return Response(data, status=status.HTTP_200_OK)
