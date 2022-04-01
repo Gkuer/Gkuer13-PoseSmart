@@ -20,8 +20,8 @@ def check_neck(request):
     # print("request data: ", type(request.data['face_x']))
     serializer = InitCheckNeckSerializer(data=request.data)
 
-    print(type(request.data['face_x']))
-    print(type(request.data['face_x_mean']))
+    # print(type(request.data['face_x']))
+    # print(type(request.data['face_x_mean']))
     if serializer.is_valid(raise_exception=True):
         # print('passed')
         # Common
@@ -105,14 +105,14 @@ def check_neck(request):
             
             right_eye_x = sum(list(map(lambda x: x[0], right_eye))) / 6
             left_eye_x = sum(list(map(lambda x: x[0], left_eye))) / 6
-            print('y: ', get_face_y, face_y_mean + nose_mean)
-            print('x: ', face_x_mean * 1.1, get_face_x)
+            # print('y: ', get_face_y, face_y_mean + nose_mean)
+            # print('x: ', face_x_mean * 1.1, get_face_x)
 
             # 얼굴이 내려가거나, 가까워 지는 경우
             y_result = True
             if get_face_y > face_y_mean + nose_mean or face_x_mean * 1.1 <= get_face_x: # TODO: 0.7? 1.0?
-                print("내려감:",  get_face_y > face_y_mean + nose_mean)
-                print('가까이', face_x_mean * 1.1 <= get_face_x)
+                # print("내려감:",  get_face_y > face_y_mean + nose_mean)
+                # print('가까이', face_x_mean * 1.1 <= get_face_x)
                 y_result = False
 
             # 기운 자세의 경우
@@ -125,7 +125,7 @@ def check_neck(request):
                 'y_result': y_result,
                 'x_result': x_result
             }
-            print('over 4', data)
+            # print('over 4', data)
             return Response(data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
