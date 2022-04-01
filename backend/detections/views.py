@@ -26,7 +26,7 @@ def check_neck(request):
         # print('passed')
         # Common
         image_string = serializer.data.get("blob_data")[22:]
-        image_data = base64.b64decode(image_string)  
+        image_data = base64.b64decode(image_string)
         nparr = np.frombuffer(image_data, np.uint8)
         img = cv.imdecode(nparr, cv.IMREAD_COLOR)
 
@@ -43,24 +43,95 @@ def check_neck(request):
         # face landmark list
         landmark_list = face_landmark.get_landmark(img)
 
-        left_eye = landmark_list[42:48]
-        right_eye = landmark_list[36:42]
+        if landmark_list:
+            left_eye = landmark_list[42:48]
+            right_eye = landmark_list[36:42]
 
-        # x
-        right_cheek_x = sum(list(map(lambda x: x[0], landmark_list[0:4]))) / 4
-        left_cheek_x = sum(list(map(lambda x: x[0], landmark_list[13:17]))) / 4
-        get_face_x = left_cheek_x - right_cheek_x
+            # x
+            right_cheek_x = sum(list(map(lambda x: x[0], landmark_list[0:4]))) / 4
+            left_cheek_x = sum(list(map(lambda x: x[0], landmark_list[13:17]))) / 4
+            get_face_x = left_cheek_x - right_cheek_x
 
-        # y
-        right_eye_y = sum(list(map(lambda x: x[1], right_eye))) / 6
-        left_eye_y = sum(list(map(lambda x: x[1], left_eye))) / 6
-        nose_y = sum(list(map(lambda x: x[1], landmark_list[31:36]))) / 5
+            # y
+            right_eye_y = sum(list(map(lambda x: x[1], right_eye))) / 6
+            left_eye_y = sum(list(map(lambda x: x[1], left_eye))) / 6
+            nose_y = sum(list(map(lambda x: x[1], landmark_list[31:36]))) / 5
 
-        get_face_y = (right_eye_y + left_eye_y + nose_y) / 3
-        dist_nose_to_face_center = abs(nose_y - get_face_y)
+            get_face_y = (right_eye_y + left_eye_y + nose_y) / 3
+            dist_nose_to_face_center = abs(nose_y - get_face_y)
 
 
-        if cnt <= 3:
+            if cnt <= 3:
+                if face_y_string and nose_to_center_string and face_x_string:
+                    face_x = face_x_string.split(",")
+                    face_y = face_y_string.split(",")
+                    nose_to_center = nose_to_center_string.split(",")
+                    # print(face_x, face_y)
+                else:
+                    # 기준 값
+                    face_x = []  # 얼굴 폭
+                    face_y = []  # 얼굴 y축 평균 좌표값
+                    nose_to_center = []  # 코와 얼굴 중간 간의 거리
+
+                face_x.append(get_face_x)
+                face_y.append(get_face_y)
+                nose_to_center.append(dist_nose_to_face_center)
+                cnt += 1
+                data = {
+                    'face_x': face_x,
+                    'face_y': face_y,
+                    'nose_to_center': nose_to_center,
+                    'cnt': cnt,
+                    'face_x_mean': 0,
+                    'face_y_mean' : 0,
+                    'nose_mean': 0,
+                    'detection_flag': "detected"
+                }
+
+                if cnt == 4:
+
+                    face_x_mean = sum(list(map(float, face_x))) / 4  #TODO: 5-> 4
+                    face_y_mean = sum(list(map(float, face_y))) / 4
+                    nose_mean = sum(list(map(float, nose_to_center))) / 4
+                    # print(face_x_mean, 'mean')
+                    data['face_x_mean'] = face_x_mean
+                    data['face_y_mean'] = face_y_mean
+                    data['nose_mean'] = nose_mean
+
+                # data['cnt'] += 1
+                # print('res: ', data)
+                return Response(data, status=status.HTTP_200_OK)
+
+            else:
+
+                right_eye_x = sum(list(map(lambda x: x[0], right_eye))) / 6
+                left_eye_x = sum(list(map(lambda x: x[0], left_eye))) / 6
+                # print('y: ', get_face_y, face_y_mean + nose_mean)
+                # print('x: ', face_x_mean * 1.1, get_face_x)
+
+                # 얼굴이 내려가거나, 가까워 지는 경우
+                y_result = True
+                if get_face_y > face_y_mean + nose_mean or face_x_mean * 1.1 <= get_face_x: # TODO: 0.7? 1.0?
+                    # print("내려감:",  get_face_y > face_y_mean + nose_mean)
+                    # print('가까이', face_x_mean * 1.1 <= get_face_x)
+                    y_result = False
+
+                # 기운 자세의 경우
+                x_result = True
+                angle = 90 + (np.arctan2(left_eye_y - right_eye_y, left_eye_x - right_eye_x) * 180) / np.pi
+                if angle > 100 or angle < 80:
+                    x_result = False
+
+                data = {
+                    'y_result': y_result,
+                    'x_result': x_result,
+                    'detection_flag': "detected"
+                }
+                # print('over 4', data)
+                return Response(data, status=status.HTTP_200_OK)
+
+        else: # 초기 셋팅 할 때(~cnt4) & 셋팅 끝나고 추적 중일때
+
             if face_y_string and nose_to_center_string and face_x_string:
                 face_x = face_x_string.split(",")
                 face_y = face_y_string.split(",")
@@ -71,62 +142,19 @@ def check_neck(request):
                 face_x = []  # 얼굴 폭
                 face_y = []  # 얼굴 y축 평균 좌표값
                 nose_to_center = []  # 코와 얼굴 중간 간의 거리
-            
-            face_x.append(get_face_x)
-            face_y.append(get_face_y)
-            nose_to_center.append(dist_nose_to_face_center)
-            cnt += 1
+
             data = {
                 'face_x': face_x,
                 'face_y': face_y,
                 'nose_to_center': nose_to_center,
                 'cnt': cnt,
-                'face_x_mean': 0,
-                'face_y_mean' : 0,
-                'nose_mean': 0
-
+                'face_x_mean': face_x_mean,
+                'face_y_mean': face_y_mean,
+                'nose_mean': nose_mean,
+                'detection_flag': "false"
             }
 
-            if cnt == 4:
-
-                face_x_mean = sum(list(map(float, face_x))) / 4  #TODO: 5-> 4
-                face_y_mean = sum(list(map(float, face_y))) / 4
-                nose_mean = sum(list(map(float, nose_to_center))) / 4
-                # print(face_x_mean, 'mean')
-                data['face_x_mean'] = face_x_mean
-                data['face_y_mean'] = face_y_mean
-                data['nose_mean'] = nose_mean
-
-            # data['cnt'] += 1
-            # print('res: ', data)
-            return Response(data, status=status.HTTP_200_OK)
-
-        else:
-            
-            right_eye_x = sum(list(map(lambda x: x[0], right_eye))) / 6
-            left_eye_x = sum(list(map(lambda x: x[0], left_eye))) / 6
-            # print('y: ', get_face_y, face_y_mean + nose_mean)
-            # print('x: ', face_x_mean * 1.1, get_face_x)
-
-            # 얼굴이 내려가거나, 가까워 지는 경우
-            y_result = True
-            if get_face_y > face_y_mean + nose_mean or face_x_mean * 1.1 <= get_face_x: # TODO: 0.7? 1.0?
-                # print("내려감:",  get_face_y > face_y_mean + nose_mean)
-                # print('가까이', face_x_mean * 1.1 <= get_face_x)
-                y_result = False
-
-            # 기운 자세의 경우
-            x_result = True
-            angle = 90 + (np.arctan2(left_eye_y - right_eye_y , left_eye_x - right_eye_x) * 180) / np.pi
-            if angle > 100 or angle < 80:
-                x_result = False
-
-            data = {
-                'y_result': y_result,
-                'x_result': x_result
-            }
-            # print('over 4', data)
-            return Response(data, status=status.HTTP_200_OK)
+            return Response(data,status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def check_blink(request):
@@ -146,35 +174,49 @@ def check_blink(request):
         img = cv.imdecode(nparr, cv.IMREAD_COLOR)
 
         landmark_list = face_landmark.get_landmark(img)
-        left_eye = landmark_list[42:48]
-        right_eye = landmark_list[36:42]
 
-        # 눈깜박임
-        leftEAR = face_landmark.eye_ratio(left_eye)
-        rightEAR = face_landmark.eye_ratio(right_eye)
+        if landmark_list:
+            left_eye = landmark_list[42:48]
+            right_eye = landmark_list[36:42]
 
-        ear = (leftEAR + rightEAR) / 2.0
+            # 눈깜박임
+            leftEAR = face_landmark.eye_ratio(left_eye)
+            rightEAR = face_landmark.eye_ratio(right_eye)
 
-        res = False
-        if ear < EYE_AR_THRESH:
-            # count += 1
-            res = True
-            total += 1
-            # print('눈깜박')
+            ear = (leftEAR + rightEAR) / 2.0
 
-        # else:
-        #     if count >= EYE_AR_CONSEC_FRAMES:
-        #         total += 1
-        #         res = True
-        #         print('눈깜빡')
-        #     count = 0
+            res = False
+            if ear < EYE_AR_THRESH:
+                # count += 1
+                res = True
+                total += 1
+                # print('눈깜박')
 
-        time += 500
-        data = {
-            "total": total,
-            "count": count,
-            "res": res,
-            "time": time,
-        }
+            # else:
+            #     if count >= EYE_AR_CONSEC_FRAMES:
+            #         total += 1
+            #         res = True
+            #         print('눈깜빡')
+            #     count = 0
 
-        return Response(data, status=status.HTTP_200_OK)
+            time += 500
+            data = {
+                "total": total,
+                "count": count,
+                "res": res,
+                "time": time,
+                "detection_flag": "detected"
+            }
+
+            return Response(data, status=status.HTTP_200_OK)
+
+        else:
+            data = {
+                "total": total,
+                "count": count,
+                "res": False,
+                "time": time,
+                "detection_flag": "false"
+            }
+
+            return Response(data, status=status.HTTP_200_OK)

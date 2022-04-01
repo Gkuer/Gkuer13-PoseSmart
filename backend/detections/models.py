@@ -11,9 +11,11 @@ class NeckDetection(models.Model):
     face_y = models.TextField(default=None,null=True, blank=True)
     nose_to_center = models.TextField(default=None,null=True, blank=True)
     cnt = models.IntegerField(default=0)
+    detection_flag = models.CharField(max_length=50, blank=True)
 
 class BlinkDetection(models.Model):
     blob_data = models.TextField()
     count = models.IntegerField(default=0)
     total = models.IntegerField(default=0)
     time = models.IntegerField(default=0) # 1: 1ms
+    detection_flag = models.CharField(max_length=50, blank=True)
