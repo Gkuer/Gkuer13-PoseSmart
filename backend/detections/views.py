@@ -128,10 +128,10 @@ def check_neck(request):
             print('over 4', data)
             return Response(data, status=status.HTTP_200_OK)
 
+@api_view(['POST'])
 def check_blink(request):
     EYE_AR_THRESH = 0.27
     EYE_AR_CONSEC_FRAMES = 2
-
     serializer = CheckBlinkSerializer(data=request.data)
 
     if serializer.is_valid(raise_exception=True):
@@ -157,15 +157,19 @@ def check_blink(request):
 
         res = False
         if ear < EYE_AR_THRESH:
-            count += 1
+            # count += 1
+            res = True
+            total += 1
+            # print('눈깜박')
 
-        else:
-            if count >= EYE_AR_CONSEC_FRAMES:
-                total += 1
-                res = True
-            count = 0
+        # else:
+        #     if count >= EYE_AR_CONSEC_FRAMES:
+        #         total += 1
+        #         res = True
+        #         print('눈깜빡')
+        #     count = 0
 
-        time += 1
+        time += 500
         data = {
             "total": total,
             "count": count,
