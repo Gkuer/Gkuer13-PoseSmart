@@ -111,18 +111,14 @@ def check_neck(request):
 
                 # 얼굴이 내려가거나, 가까워 지는 경우
                 y_result = True
-                if get_face_y > face_y_mean + nose_mean or face_x_mean * 1.1 <= get_face_x: # TODO: 0.7? 1.0?
-                    # print("내려감:",  get_face_y > face_y_mean + nose_mean)
-                    # print('가까이', face_x_mean * 1.1 <= get_face_x)
-                    y_result = False
 
-                # [예외처리] : 얼굴이 멀리 가면 거북목이 아니라는 가정 하에 거북목 False 풀어주기
                 close = face_x_mean * 1.05 <= get_face_x
                 down = get_face_y > (face_y_mean + nose_mean) * 1.02
 
                 if close or down:
 
                     y_result = False
+                    # [예외처리] : 얼굴이 멀리 가면 거북목이 아니라는 가정 하에 거북목 False 풀어주기
                     if down and face_x_mean * 0.85 > get_face_x:
                         y_result = True
 
