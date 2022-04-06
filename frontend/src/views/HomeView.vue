@@ -64,6 +64,7 @@
               :style="{ fontSize: '1.5rem' }"
               label="비밀번호"
               v-model="password"
+              type="password"
             ></v-text-field>
           </div>
           <v-row class="mt-5">
@@ -94,6 +95,7 @@
             <v-text-field
               label="비밀번호"
               v-model="registerPassword"
+              type="password"
             ></v-text-field>
           </div>
           <v-row class="mt-5">

@@ -2,23 +2,33 @@
   <div>
     <div
       class="loginImg"
-      :style="{ backgroundImage: `url(${require('@/assets/main.jpg')})` }"
+      :style="{ backgroundImage: `url(${require('@/assets/main3.jpg')})` }"
     >
-      <div class="logo">PoseSmart</div>
-      <div class="content" :style="{ top: '55%', fontSize: '3rem' }">
+      <div class="logo">
+        <img
+          @click="home"
+          src="@/assets/logo_transparent.png"
+          alt=""
+          width="300"
+        />
+      </div>
+      <v-btn class="logout" @click="logout">LOGOUT</v-btn>
+      <div class="content" :style="{ top: '63%', fontSize: '3rem' }">
         <div>AI 거북목 탐지 & 눈 깜빡임 감지</div>
-        <div :style="{ marginTop: '130px' }">
+        <div :style="{ marginTop: '80px' }">
           캠을 이용하여 거북목과 눈 깜빡임 감지시 알림을 드립니다.
         </div>
       </div>
     </div>
+
     <div>
       <v-row class="mt-4 ml-5">
         <v-col></v-col>
         <v-col></v-col>
         <v-col>
           <img
-            src="@/assets/detect.png"
+            class="rounded-xl"
+            src="@/assets/detect1.png"
             alt=""
             width="368"
             @click="click('detect')"
@@ -27,7 +37,8 @@
         <v-col></v-col>
         <v-col>
           <img
-            src="@/assets/result.png"
+            class="rounded-xl"
+            src="@/assets/result1.png"
             alt=""
             width="368"
             @click="click('result')"
@@ -36,7 +47,8 @@
         <v-col></v-col>
         <v-col>
           <img
-            src="@/assets/alarm.png"
+            class="rounded-xl"
+            src="@/assets/alarm1.png"
             alt=""
             width="368"
             @click="click('alarm')"
@@ -77,7 +89,7 @@
               <v-col cols="6">
                 <v-select
                   v-model="select[1]"
-                  :items="items"
+                  :items="eyeitems"
                   item-text="state"
                   item-value="val"
                   label="Select"
@@ -137,6 +149,14 @@ import Vue from "vue";
 import { getTime, modifyTime } from "@/api/user";
 export default Vue.extend({
   methods: {
+    home() {
+      this.$router.push({ name: "LoginHome" });
+    },
+    logout() {
+      sessionStorage.removeItem("accessToken");
+      this.$router.push({ name: "HomeView" });
+      this.$router.go(0);
+    },
     async click(val: string): Promise<void> {
       if (val === "detect") {
         this.$router.push({ name: "DectectPose" });
@@ -195,6 +215,12 @@ export default Vue.extend({
         { state: "15초", val: 15 },
         { state: "10초", val: 10 },
       ],
+      eyeitems: [
+        { state: "20초", val: 20 },
+        { state: "6초", val: 6 },
+        { state: "5초", val: 5 },
+        { state: "4초", val: 4 },
+      ],
       selectStretch: {
         state: "3시간",
         val: 3,
@@ -217,4 +243,9 @@ export default Vue.extend({
 });
 </script>
 
-<style></style>
+<style>
+.logout {
+  left: 95%;
+  margin-top: 10px;
+}
+</style>

@@ -24,7 +24,8 @@ export default Vue.extend({
   color: black;
   font-weight: bold;
   z-index: 2;
-  left: 0.5%;
+  left: -2%;
+  top: -12%;
 }
 .mainImg {
   position: relative;

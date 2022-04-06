@@ -4,6 +4,15 @@
       class="mainImg"
       :style="{ backgroundImage: `url(${require('@/assets/transmain.png')})` }"
     >
+      <div class="logo">
+        <img
+          @click="home"
+          src="@/assets/logo_transparent.png"
+          alt=""
+          width="300"
+        />
+      </div>
+      <v-btn class="logout" @click="logout">LOGOUT</v-btn>
       <div class="content" :style="{ top: '20%' }">
         <div>활동 내역</div>
       </div>
@@ -21,13 +30,15 @@
       <div class="text-center pt-2">
         <v-pagination v-model="page" :length="pageCount"></v-pagination>
       </div>
+      <v-btn color="error" class="del" @click="del">회원탈퇴</v-btn>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { getReports } from "@/api/user";
+import { getReports, deleteUser } from "@/api/user";
+import jwt_decode from "jwt-decode";
 interface Report {
   date: string;
   start_time: string;
@@ -96,6 +107,32 @@ export default Vue.extend({
       console.log(e);
     }
   },
+  methods: {
+    home() {
+      this.$router.push({ name: "LoginHome" });
+    },
+    logout() {
+      sessionStorage.removeItem("accessToken");
+      this.$router.push({ name: "HomeView" });
+      this.$router.go(0);
+    },
+    del() {
+      const token: any = jwt_decode(
+        sessionStorage.getItem("accessToken") || "{}"
+      );
+      console.log(token);
+      const userid = token.user_id;
+      console.log(userid, "userid");
+      try {
+        deleteUser(userid);
+        sessionStorage.removeItem("accessToken");
+        this.$router.push({ name: "HomewView" });
+        this.$router.go(0);
+      } catch (error) {
+        alert("회원 탈퇴 중 오류 발생");
+      }
+    },
+  },
 });
 </script>
 
@@ -111,5 +148,19 @@ export default Vue.extend({
   z-index: 2;
   text-align: center;
   width: 1200px;
+}
+.del {
+  font-size: 15px;
+  font-weight: bold;
+  left: 45%;
+}
+.logo {
+  position: absolute;
+  font-size: 3rem;
+  color: black;
+  font-weight: bold;
+  z-index: 2;
+  left: -2%;
+  top: -7.2%;
 }
 </style>
