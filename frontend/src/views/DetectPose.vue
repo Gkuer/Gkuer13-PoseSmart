@@ -249,6 +249,9 @@ export default Vue.extend({
           console.log(error);
         }
       }
+      clearInterval(this.timeset);
+      clearInterval(this.eyeTimeSet);
+      clearInterval(this.neckTime);
       this.$router.push({ name: "LoginHome" });
     },
     takePhoto() {

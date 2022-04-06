@@ -113,6 +113,9 @@
         </div>
       </div>
     </div>
+    <div style="text-align: center">
+      <img class="" src="@/assets/explain.png" alt="" width="90%" />
+    </div>
   </div>
 </template>
 
