@@ -100,7 +100,7 @@ DATABASES = {
         'USER': 'posesmart',
         'PASSWORD': '8888',
         'HOST': '3.38.193.177',
-        'PORT': '8888',
+        'PORT': '3606',
     }
 }
 
