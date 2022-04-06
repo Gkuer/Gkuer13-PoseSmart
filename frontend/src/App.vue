@@ -33,12 +33,12 @@ export default Vue.extend({
 }
 .mainImg {
   position: relative;
-  height: 100vh;
+  height: 90vh;
   background-size: cover;
 }
 .loginImg {
   position: relative;
-  height: 60vh;
+  height: 55vh;
   background-size: cover;
 }
 .content {
