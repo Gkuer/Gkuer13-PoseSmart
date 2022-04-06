@@ -146,7 +146,7 @@
       </v-dialog>
     </div>
     <div style="text-align: center">
-      <img class="" src="@/assets/explain.png" alt="" width="90%" />
+      <img class="how" src="@/assets/how.png" alt="" width="90%" />
     </div>
   </div>
 </template>
@@ -254,5 +254,8 @@ export default Vue.extend({
 .logout {
   left: 95%;
   margin-top: 10px;
+}
+.how {
+  margin-top: 50px;
 }
 </style>

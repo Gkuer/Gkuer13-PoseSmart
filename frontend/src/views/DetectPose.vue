@@ -117,6 +117,7 @@ export default Vue.extend({
       eyeSound: {}, // 눈깜빡임 사운드
       notDetection: 0,
       isDetect: false,
+      working: true,
     };
   },
   async created() {
@@ -227,8 +228,9 @@ export default Vue.extend({
     },
     pause() {
       if (this.time > 0) {
-        clearInterval(this.timeset);
         clearInterval(this.eyeTimeSet);
+        clearInterval(this.timeset.eyeTimeSet);
+        clearInterval(this.timeset);
         clearInterval(this.neckTime);
         this.mode = "play";
         this.localVideo.srcObject = null;
@@ -268,9 +270,11 @@ export default Vue.extend({
             if (data.detection_flag === "false") {
               if (++this.notDetection % 3 === 0) {
                 this.notDetectionSound.play();
+                this.working = false;
               }
             }
             if (data.detection_flag === "detected") {
+              this.working = true;
               if (!data.x_result) {
                 this.xCnt++; //  고개 기울어진 횟수
               }
@@ -312,6 +316,7 @@ export default Vue.extend({
           this.resBlinkData = (await getDetectBlink(this.resBlinkData)).data;
           if (this.resBlinkData.res === true) {
             // 알림음 울리기
+
             this.eyeAlarm = true;
             clearInterval(this.eyeTimeSet);
           } // 20초 안에 true나오면 그만 보냈다가 다시 20초 되면 보내기
@@ -335,11 +340,14 @@ export default Vue.extend({
         if (second % this.userSetting.blink_time === 0) {
           if (!this.eyeAlarm) {
             // 알람 울리기
-            this.blink_cnt++;
-            this.eyeSound.play();
+            if (this.working) {
+              this.blink_cnt++;
+              this.eyeSound.play();
+            }
           }
           this.eyeAlarm = false;
           this.eyeTimeSet = setInterval(() => {
+            console.log("eyeTime");
             this.imageCapture.takePhoto().then((blob) => {
               reader.readAsDataURL(blob);
             });
