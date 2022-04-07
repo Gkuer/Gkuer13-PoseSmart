@@ -50,7 +50,7 @@
             ><img class="icon" src="@/assets/exit.png" alt="" @click="exit()"
           /></v-col>
         </v-row>
-        <v-row v-if="isSame">
+        <v-row v-if="!isSame">
           <v-col></v-col>
           <v-col></v-col>
           <v-col></v-col>
@@ -126,7 +126,7 @@ export default Vue.extend({
       notDetection: 0,
       isDetect: false,
       working: true,
-      isSame: false,
+      isSame: true,
     };
   },
   async created() {
