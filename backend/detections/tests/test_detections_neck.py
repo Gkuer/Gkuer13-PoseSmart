@@ -6,7 +6,7 @@ import time
 def test_detections_neck_with_noface(client):
     access_token = Authentication.signup_login(client)
 
-    url = '/api/detections/'
+    url = '/api/detections/neck/'
     data = {
         "blob_data": get_base64.get_base64_encoded_blob("noface"),
         "face_x": "1,1",
@@ -47,7 +47,7 @@ def test_detections_neck_with_noface(client):
 def test_detections_neck_with_face(client):
     access_token = Authentication.signup_login(client)
 
-    url = '/api/detections/'
+    url = '/api/detections/neck/'
     data = {
         "blob_data": get_base64.get_base64_encoded_blob("face"),
         "face_x": "1,1",
@@ -90,7 +90,7 @@ def test_detections_neck_with_face(client):
 def test_detections_neck_with_face_100(client):
     access_token = Authentication.signup_login(client)
 
-    url = '/api/detections/'
+    url = '/api/detections/neck/'
     data = {
         "blob_data": get_base64.get_base64_encoded_blob("face"),
         "face_x": "1,1",

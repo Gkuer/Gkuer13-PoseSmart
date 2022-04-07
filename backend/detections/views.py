@@ -165,7 +165,7 @@ def check_blink(request):
                 data["res"] = True
                 data["total"] += 1
 
-            time += 500
+            data["time"] += 500
 
         else:
             data["detection_flag"] = "false"

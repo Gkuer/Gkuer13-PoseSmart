@@ -42,13 +42,7 @@ def test_detections_blink_with_face(client):
     response = client.post(url, HTTP_AUTHORIZATION=f'Bearer {access_token}', data=data, content_type="application/json")
 
     assert response.status_code == 200
-    assert response.data == {
-    "total": 0,
-    "count": 0,
-    "res": False,
-    "time": 500,
-    "detection_flag": "detected"
-}
+    assert response.data == {"total": 0, "count": 0, "res": False, "time": 500, "detection_flag": "detected"}
 
 @pytest.mark.django_db
 def test_detections_blink_with_face_100(client):
