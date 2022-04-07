@@ -13,7 +13,7 @@
         />
       </div>
       <v-btn class="logout" @click="logout">LOGOUT</v-btn>
-      <div class="content">
+      <div class="content" :style="{ marginTop: '100px' }">
         <div>Time : {{ timeString }}</div>
         <div>
           <video
@@ -49,6 +49,14 @@
           <v-col
             ><img class="icon" src="@/assets/exit.png" alt="" @click="exit()"
           /></v-col>
+        </v-row>
+        <v-row v-if="isSame">
+          <v-col></v-col>
+          <v-col></v-col>
+          <v-col></v-col>
+          동일인물이 아닙니다
+          <v-col></v-col>
+          <v-col></v-col>
         </v-row>
       </div>
     </div>
@@ -118,6 +126,7 @@ export default Vue.extend({
       notDetection: 0,
       isDetect: false,
       working: true,
+      isSame: false,
     };
   },
   async created() {
@@ -266,8 +275,9 @@ export default Vue.extend({
             this.overFive_data.blob_data = reader.result;
             this.overFive_data.cnt = this.overFive_data.cnt + 1;
             const data = (await getDetect(this.overFive_data)).data;
-            console.log("Over 4 res", data);
-          
+            console.log(data, "faceId 체크용");
+            this.isSame = data.face_id_flag ? true : false;
+            console.log(this.isSame);
             if (data.detection_flag === "false") {
               if (++this.notDetection % 3 === 0) {
                 this.notDetectionSound.play();
