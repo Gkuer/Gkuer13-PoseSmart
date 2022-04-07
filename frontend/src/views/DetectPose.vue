@@ -50,7 +50,7 @@
             ><img class="icon" src="@/assets/exit.png" alt="" @click="exit()"
           /></v-col>
         </v-row>
-        <v-row v-if="!isSame">
+        <v-row v-if="!isSame" class="blink">
           <v-col></v-col>
           <v-col></v-col>
           <v-col></v-col>
@@ -419,5 +419,14 @@ export default Vue.extend({
   z-index: 2;
   left: -2%;
   top: -7.2%;
+}
+@keyframes blink-effect {
+  50% {
+    opacity: 0;
+  }
+}
+.blink {
+  animation: blink-effect 1.2s step-end infinite;
+  color: red;
 }
 </style>
