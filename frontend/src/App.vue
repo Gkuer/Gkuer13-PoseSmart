@@ -17,7 +17,11 @@ export default Vue.extend({
   }),
 });
 </script>
-<style>
+<style scope>
+@import url("https://fonts.googleapis.com/css2?family=Jua&display=swap");
+* {
+  font-family: "Jua", sans-serif;
+}
 .logo {
   position: absolute;
   font-size: 3rem;
@@ -29,12 +33,12 @@ export default Vue.extend({
 }
 .mainImg {
   position: relative;
-  height: 100vh;
+  height: 90vh;
   background-size: cover;
 }
 .loginImg {
   position: relative;
-  height: 60vh;
+  height: 55vh;
   background-size: cover;
 }
 .content {

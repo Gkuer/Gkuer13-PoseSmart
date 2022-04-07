@@ -13,7 +13,7 @@
         />
       </div>
       <v-btn class="logout" @click="logout">LOGOUT</v-btn>
-      <div class="content">
+      <div class="content" :style="{ marginTop: '100px' }">
         <div>Time : {{ timeString }}</div>
         <div>
           <video
@@ -49,6 +49,14 @@
           <v-col
             ><img class="icon" src="@/assets/exit.png" alt="" @click="exit()"
           /></v-col>
+        </v-row>
+        <v-row v-if="isSame">
+          <v-col></v-col>
+          <v-col></v-col>
+          <v-col></v-col>
+          동일인물이 아닙니다
+          <v-col></v-col>
+          <v-col></v-col>
         </v-row>
       </div>
     </div>
@@ -117,6 +125,8 @@ export default Vue.extend({
       eyeSound: {}, // 눈깜빡임 사운드
       notDetection: 0,
       isDetect: false,
+      working: true,
+      isSame: false,
     };
   },
   async created() {
@@ -227,8 +237,9 @@ export default Vue.extend({
     },
     pause() {
       if (this.time > 0) {
-        clearInterval(this.timeset);
         clearInterval(this.eyeTimeSet);
+        clearInterval(this.timeset.eyeTimeSet);
+        clearInterval(this.timeset);
         clearInterval(this.neckTime);
         this.mode = "play";
         this.localVideo.srcObject = null;
@@ -249,6 +260,9 @@ export default Vue.extend({
           console.log(error);
         }
       }
+      clearInterval(this.timeset);
+      clearInterval(this.eyeTimeSet);
+      clearInterval(this.neckTime);
       this.$router.push({ name: "LoginHome" });
     },
     takePhoto() {
@@ -261,13 +275,17 @@ export default Vue.extend({
             this.overFive_data.blob_data = reader.result;
             this.overFive_data.cnt = this.overFive_data.cnt + 1;
             const data = (await getDetect(this.overFive_data)).data;
-            console.log("Over 4 res", data);
+            console.log(data, "faceId 체크용");
+            this.isSame = data.face_id_flag ? true : false;
+            console.log(this.isSame);
             if (data.detection_flag === "false") {
               if (++this.notDetection % 3 === 0) {
                 this.notDetectionSound.play();
+                this.working = false;
               }
             }
             if (data.detection_flag === "detected") {
+              this.working = true;
               if (!data.x_result) {
                 this.xCnt++; //  고개 기울어진 횟수
               }
@@ -309,6 +327,7 @@ export default Vue.extend({
           this.resBlinkData = (await getDetectBlink(this.resBlinkData)).data;
           if (this.resBlinkData.res === true) {
             // 알림음 울리기
+
             this.eyeAlarm = true;
             clearInterval(this.eyeTimeSet);
           } // 20초 안에 true나오면 그만 보냈다가 다시 20초 되면 보내기
@@ -332,14 +351,23 @@ export default Vue.extend({
         if (second % this.userSetting.blink_time === 0) {
           if (!this.eyeAlarm) {
             // 알람 울리기
-            this.blink_cnt++;
-            this.eyeSound.play();
+            if (this.working) {
+              this.blink_cnt++;
+              this.eyeSound.play();
+            }
           }
           this.eyeAlarm = false;
           this.eyeTimeSet = setInterval(() => {
-            this.imageCapture.takePhoto().then((blob) => {
-              reader.readAsDataURL(blob);
-            });
+            console.log("eyeTime");
+            this.imageCapture
+              .takePhoto()
+              .then((blob) => {
+                reader.readAsDataURL(blob);
+              })
+              .catch((error) => {
+                console.log(error);
+                clearInterval(this.eyeTimeSet);
+              });
           }, 500); // 0 -> 10 +10 / 20
         }
 

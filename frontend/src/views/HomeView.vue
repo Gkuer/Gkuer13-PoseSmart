@@ -8,17 +8,26 @@
         <div class="content">
           <v-row class="mt-15"></v-row>
           <v-row class="mt-15"></v-row>
-          <v-row :style="{ marginLeft: '200px' }">PoseSmart</v-row>
+          <v-row class="mt-15"></v-row>
+          <v-row :style="{ marginLeft: '200px' }">
+            <v-col></v-col>
+            PoseSmart
+            <v-col></v-col>
+            <v-col></v-col>
+            <v-col></v-col>
+          </v-row>
           <v-row class="mt-15"></v-row>
           <v-row class="mt-15"></v-row>
           <v-row class="mt-15"></v-row>
-          <v-row class="mt-15" :style="{ fontSize: '4rem' }"
+          <v-row class="mt-15 ml-15" :style="{ fontSize: '4rem' }"
             >AI 거북목 & 눈 깜빡임 감지</v-row
           >
-          <v-row class="mt-8 ml-15" :style="{ fontSize: '3rem' }"
-            >간단히 가입하고 이용하세요</v-row
-          >
+          <v-row class="mt-8 ml-15" :style="{ fontSize: '3rem' }">
+            <v-col> 간단히 가입하고 이용하세요 </v-col>
+          </v-row>
           <v-row class="mt-10">
+            <v-col></v-col>
+            <v-col></v-col>
             <v-col></v-col>
             <v-col
               ><v-btn
@@ -112,6 +121,9 @@
           </v-row>
         </div>
       </div>
+    </div>
+    <div style="text-align: center">
+      <img class="" src="@/assets/explain.png" alt="" width="90%" />
     </div>
   </div>
 </template>

@@ -13,10 +13,14 @@
         />
       </div>
       <v-btn class="logout" @click="logout">LOGOUT</v-btn>
-      <div class="content" :style="{ top: '63%', fontSize: '3rem' }">
+      <div
+        class="content"
+        :style="{ top: '65%', fontSize: '3rem', width: '900px' }"
+      >
         <div>AI 거북목 탐지 & 눈 깜빡임 감지</div>
-        <div :style="{ marginTop: '80px' }">
-          캠을 이용하여 거북목과 눈 깜빡임 감지시 알림을 드립니다.
+        <div :style="{ marginTop: '50px' }">
+          거북목과 눈 깜빡임 감지시 알림을 드립니다.<br />
+          탐지 하시기 전에 아래 메뉴얼을 확인 주세요
         </div>
       </div>
     </div>
@@ -141,6 +145,9 @@
         </v-card>
       </v-dialog>
     </div>
+    <div style="text-align: center">
+      <img class="how" src="@/assets/how.png" alt="" width="90%" />
+    </div>
   </div>
 </template>
 
@@ -247,5 +254,8 @@ export default Vue.extend({
 .logout {
   left: 95%;
   margin-top: 10px;
+}
+.how {
+  margin-top: 50px;
 }
 </style>
