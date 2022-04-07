@@ -267,6 +267,7 @@ export default Vue.extend({
             this.overFive_data.cnt = this.overFive_data.cnt + 1;
             const data = (await getDetect(this.overFive_data)).data;
             console.log("Over 4 res", data);
+          
             if (data.detection_flag === "false") {
               if (++this.notDetection % 3 === 0) {
                 this.notDetectionSound.play();
@@ -348,9 +349,15 @@ export default Vue.extend({
           this.eyeAlarm = false;
           this.eyeTimeSet = setInterval(() => {
             console.log("eyeTime");
-            this.imageCapture.takePhoto().then((blob) => {
-              reader.readAsDataURL(blob);
-            });
+            this.imageCapture
+              .takePhoto()
+              .then((blob) => {
+                reader.readAsDataURL(blob);
+              })
+              .catch((error) => {
+                console.log(error);
+                clearInterval(this.eyeTimeSet);
+              });
           }, 500); // 0 -> 10 +10 / 20
         }
 
