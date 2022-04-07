@@ -78,7 +78,7 @@ def check_neck(request):
                     'face_y_mean': 0,
                     'nose_mean': 0,
                     'detection_flag': "detected",
-                    'face_id_flag' : True
+                    'face_id_flag': True
                 }
 
 
@@ -127,7 +127,8 @@ def check_neck(request):
                 data = {
                     'x_result': x_result,
                     'y_result': y_result,
-                    'detection_flag': "detected"
+                    'detection_flag': "detected",
+                    'face_id_flag': True
                 }
 
                 # FaceID Work
