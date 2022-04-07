@@ -103,7 +103,7 @@ WSGI_APPLICATION = 'posesmart.wsgi.application'
 #         'USER': 'posesmart',
 #         'PASSWORD': '8888',
 #         'HOST': '3.38.193.177',
-#         'PORT': '3606',
+#         'PORT': '3306',
 #     }
 # }
 

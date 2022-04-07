@@ -7,6 +7,7 @@ import numpy as np
 import base64
 import cv2 as cv
 from .tools import detections
+from django.contrib.auth import get_user_model
 
 
 @api_view(['POST'])
@@ -37,6 +38,9 @@ def check_neck(request):
 
         # Face landmark list
         landmark_list = face_landmark.get_landmark(image_3darray)
+
+        # FaceID
+        user = get_user_model().objects.get(pk=request.user.pk)
         # ================= Common END ======================
 
         if landmark_list:  # Find Face Case
@@ -73,8 +77,26 @@ def check_neck(request):
                     'face_x_mean': 0,
                     'face_y_mean': 0,
                     'nose_mean': 0,
-                    'detection_flag': "detected"
+                    'detection_flag': "detected",
+                    'face_id_flag' : True
                 }
+
+
+
+                # FaceID Vector Save
+                new_vector = face_landmark.get_average_vector(image_3darray)
+
+                if new_vector:
+                    vector_list = list(map(float, user.vector_list[1:-1].split(",")))
+                    vector_cnt = user.vector_cnt
+                    new_vector_cnt = vector_cnt + 1
+
+                    vector_list = [i * vector_cnt for i in vector_list]
+                    res_vector_list = [(vector_list[i] + new_vector[i]) / new_vector_cnt for i in range(128)]
+
+                    user.vector_list = str(res_vector_list)
+                    user.vector_cnt = new_vector_cnt
+                    user.save()
 
                 if cnt == 4:
                     data['face_x_mean'] = sum(list(map(float, face_x))) / 4
@@ -108,6 +130,16 @@ def check_neck(request):
                     'detection_flag': "detected"
                 }
 
+                # FaceID Work
+                FACE_THRESHOLD = 0.4
+
+                shapes = face_landmark.get_average_vector(image_3darray) # 새로 들어온 사진
+                standard_vector = list(map(float, user.vector_list[1:-1].split(","))) # 기존 유저
+                distance = np.linalg.norm(np.array(shapes) - np.array(standard_vector), axis=0)  # 벡터 간 유클리디안 거리 계산
+
+                if distance > FACE_THRESHOLD:
+                    data["face_id_flag"] = False
+
         else: # 얼굴 추적 불가 상태
             face_x, face_y, nose_to_center = detections.list_from_str(face_x_str, face_y_str, nose_to_center_str)
 
@@ -119,7 +151,8 @@ def check_neck(request):
                 'face_x_mean': face_x_mean,
                 'face_y_mean': face_y_mean,
                 'nose_mean': nose_mean,
-                'detection_flag': "false"
+                'detection_flag': "false",
+                'face_id_flag': True
             }
 
         return Response(data, status=status.HTTP_200_OK)
