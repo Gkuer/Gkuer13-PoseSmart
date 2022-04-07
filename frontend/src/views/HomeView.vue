@@ -8,6 +8,7 @@
         <div class="content">
           <v-row class="mt-15"></v-row>
           <v-row class="mt-15"></v-row>
+          <v-row class="mt-15"></v-row>
           <v-row :style="{ marginLeft: '200px' }">
             <v-col></v-col>
             PoseSmart
