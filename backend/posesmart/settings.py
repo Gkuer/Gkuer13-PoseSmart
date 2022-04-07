@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-&pq!g+4=q=^g6gn*z%cj5ghf-h2c2v2da9ej&oxlt8bcjh(v#t
 
 # ========= Debug Mode =========
 # Local
-DEBUG = True
+DEBUG = False
 
 # Deploy
 # DEBUG = False
@@ -96,24 +96,24 @@ WSGI_APPLICATION = 'posesmart.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 # Deploy
-# DATABASES = {
-#     'default' : {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'posesmart',
-#         'USER': 'posesmart',
-#         'PASSWORD': '8888',
-#         'HOST': '3.38.193.177',
-#         'PORT': '3306',
-#     }
-# }
-
-# Local
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    'default' : {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'posesmart',
+        'USER': 'posesmart',
+        'PASSWORD': '8888',
+        'HOST': '3.38.193.177',
+        'PORT': '3306',
     }
 }
+
+# Local
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # ========= Database Mode END =========
 
