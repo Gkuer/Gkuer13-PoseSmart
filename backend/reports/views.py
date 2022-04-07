@@ -1,4 +1,3 @@
-from django.shortcuts import get_list_or_404
 from .models import Report
 from .serializers import ReportSerializer, ReportListSerializer
 from rest_framework.response import Response

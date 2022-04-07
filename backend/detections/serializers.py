@@ -1,8 +1,7 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
 from .models import NeckDetection, BlinkDetection
 
-class InitCheckNeckSerializer(serializers.ModelSerializer):
+class CheckNeckSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = NeckDetection

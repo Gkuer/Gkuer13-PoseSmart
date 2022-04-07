@@ -8,11 +8,11 @@ def test_detections_blink_with_noface(client):
 
     url = '/api/detections/blink/'
     data = {
-        "blob_data": get_base64.get_blob_to_base64("noface"),
-        "count" : 0,
-        "total" : 0,
-        "time" : 0,
-        "detection_flag" : ""
+        "blob_data": get_base64.get_base64_encoded_blob("noface"),
+        "count": 0,
+        "total": 0,
+        "time": 0,
+        "detection_flag": ""
     }
 
     response = client.post(url, HTTP_AUTHORIZATION=f'Bearer {access_token}', data=data, content_type="application/json")
@@ -32,11 +32,11 @@ def test_detections_blink_with_face(client):
 
     url = '/api/detections/blink/'
     data = {
-        "blob_data": get_base64.get_blob_to_base64("face"),
-        "count" : 0,
-        "total" : 0,
-        "time" : 0,
-        "detection_flag" : ""
+        "blob_data": get_base64.get_base64_encoded_blob("face"),
+        "count": 0,
+        "total": 0,
+        "time": 0,
+        "detection_flag": ""
     }
 
     response = client.post(url, HTTP_AUTHORIZATION=f'Bearer {access_token}', data=data, content_type="application/json")
@@ -56,11 +56,11 @@ def test_detections_blink_with_face_100(client):
 
     url = '/api/detections/blink/'
     data = {
-        "blob_data": get_base64.get_blob_to_base64("face"),
-        "count" : 0,
-        "total" : 0,
-        "time" : 0,
-        "detection_flag" : ""
+        "blob_data": get_base64.get_base64_encoded_blob("face"),
+        "count": 0,
+        "total": 0,
+        "time": 0,
+        "detection_flag": ""
     }
 
     start = time.time()

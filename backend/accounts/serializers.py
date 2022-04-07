@@ -15,10 +15,10 @@ class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ('username','password')
+        fields = ('username', 'password')
 
 class TimeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ('blink_time','neck_time','stretching_time', 'alarm_sound')
+        fields = ('blink_time', 'neck_time', 'stretching_time', 'alarm_sound')

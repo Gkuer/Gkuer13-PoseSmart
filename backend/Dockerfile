@@ -1,8 +1,8 @@
-# ./Dockerfile
+# ./Dockerfile Settings
 FROM python:3
 WORKDIR /usr/src/app
 
-# Install
+# Installation
 COPY requirements.txt ./
 RUN pip install cmake
 RUN pip install -r requirements.txt

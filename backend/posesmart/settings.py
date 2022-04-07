@@ -24,17 +24,16 @@ SECRET_KEY = 'django-insecure-&pq!g+4=q=^g6gn*z%cj5ghf-h2c2v2da9ej&oxlt8bcjh(v#t
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
+
+# ========= Debug Mode =========
 # Local
-# DEBUG = True
+DEBUG = True
 
 # Deploy
-DEBUG = False
-
+# DEBUG = False
+# ========= Debug Mode END =========
 
 ALLOWED_HOSTS = ['*']
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -44,15 +43,18 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # User Apps
     'accounts',
     'reports',
     'detections',
 
+    # 3rd Party
     'rest_framework',
     'django_seed',
     'django_extensions',
     'corsheaders',
 
+    # AI
     'numpy',
 ]
 
@@ -65,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    # Cors
     'corsheaders.middleware.CorsMiddleware'
 ]
 
@@ -89,28 +92,30 @@ TEMPLATES = [
 WSGI_APPLICATION = 'posesmart.wsgi.application'
 
 
-# Database
+# ========= Database Mode =========
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-#===========Deploy Database===========
+# Deploy
+# DATABASES = {
+#     'default' : {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'posesmart',
+#         'USER': 'posesmart',
+#         'PASSWORD': '8888',
+#         'HOST': '3.38.193.177',
+#         'PORT': '3606',
+#     }
+# }
+
+# Local
 DATABASES = {
-    'default' : {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'posesmart',
-        'USER': 'posesmart',
-        'PASSWORD': '8888',
-        'HOST': '3.38.193.177',
-        'PORT': '3606',
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
-# ===========Local Database===========
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+# ========= Database Mode END =========
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -145,6 +150,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
+
+# =================STATIC FILES====================
 import os
 
 STATIC_URL = '/static/'
@@ -154,12 +161,15 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/static')
+
+# =================STATIC FILES END ====================
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# User Setting
+# ==================== User Setting ====================
 AUTH_USER_MODEL = 'accounts.User'
 
 REST_FRAMEWORK = {
@@ -187,6 +197,10 @@ SIMPLE_JWT = {
 
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+# ==================== User Setting END ====================
 
-# CORS
+# ==================== CORS ====================
+
 CORS_ORIGIN_ALLOW_ALL = True
+
+# ==================== CORS END ====================
