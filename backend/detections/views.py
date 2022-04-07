@@ -86,17 +86,23 @@ def check_neck(request):
                 # FaceID Vector Save
                 new_vector = face_landmark.get_average_vector(image_3darray)
 
-                if new_vector:
-                    vector_list = list(map(float, user.vector_list[1:-1].split(",")))
-                    vector_cnt = user.vector_cnt
-                    new_vector_cnt = vector_cnt + 1
+                IDENTITY_THRESHOLD = 0.45
 
-                    vector_list = [i * vector_cnt for i in vector_list]
-                    res_vector_list = [(vector_list[i] + new_vector[i]) / new_vector_cnt for i in range(128)]
+                standard_vector = list(map(float, user.vector_list[1:-1].split(",")))  # 기존 유저
+                distance = np.linalg.norm(np.array(new_vector) - np.array(standard_vector), axis=0)  # 벡터 간 유클리디안 거리 계산
 
-                    user.vector_list = str(res_vector_list)
-                    user.vector_cnt = new_vector_cnt
-                    user.save()
+                if new_vector: # 얼굴이 감지되고
+                    if (standard_vector == [0 for _ in range(128)]) or (distance < IDENTITY_THRESHOLD): # 최초랑 얼굴이 비교적 가까울때만 학습
+                        vector_list = list(map(float, user.vector_list[1:-1].split(",")))
+                        vector_cnt = user.vector_cnt
+                        new_vector_cnt = vector_cnt + 1
+
+                        vector_list = [i * vector_cnt for i in vector_list]
+                        res_vector_list = [(vector_list[i] + new_vector[i]) / new_vector_cnt for i in range(128)]
+
+                        user.vector_list = str(res_vector_list)
+                        user.vector_cnt = new_vector_cnt
+                        user.save()
 
                 if cnt == 4:
                     data['face_x_mean'] = sum(list(map(float, face_x))) / 4
@@ -132,7 +138,7 @@ def check_neck(request):
                 }
 
                 # FaceID Work
-                FACE_THRESHOLD = 0.4
+                FACE_THRESHOLD = 0.45
 
                 shapes = face_landmark.get_average_vector(image_3darray) # 새로 들어온 사진
                 standard_vector = list(map(float, user.vector_list[1:-1].split(","))) # 기존 유저
