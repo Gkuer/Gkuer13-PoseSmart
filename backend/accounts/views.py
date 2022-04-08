@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import get_user_model
+from mongos.models import Mongo
 
 @api_view(['POST','DELETE'])
 def accounts(request):
@@ -17,7 +18,7 @@ def accounts(request):
         user = get_object_or_404(get_user_model(), pk=request.user.pk)
         user.delete()
         data = {
-            "message": "정상적으로 삭제되었습니다."
+            "message": "정상적으로 삭제되었습니다.",
         }
         return Response(data, status=status.HTTP_204_NO_CONTENT)
 
