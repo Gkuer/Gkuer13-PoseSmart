@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -47,6 +46,7 @@ INSTALLED_APPS = [
     'accounts',
     'reports',
     'detections',
+    'mongos',
 
     # 3rd Party
     'rest_framework',
@@ -91,21 +91,40 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'posesmart.wsgi.application'
 
-
 # ========= Database Mode =========
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 # Deploy
 DATABASES = {
-    'default' : {
+    'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'posesmart',
         'USER': 'posesmart',
         'PASSWORD': '8888',
         'HOST': '3.38.193.177',
         'PORT': '3306',
+    },
+    'mongodb': {
+        'ENGINE': 'djongo',
+        'NAME': 'mongos', # App Name
+        # 'HOST': '3.38.193.177',
+        # 'PORT': '27017',
+        'CLIENT': {
+            'host': '3.38.193.177',
+            # 'port': 27017,
+            # 'username': 'posesmart',
+            # 'password': '8888',
+            # 'authSource': 'admin',
+            # 'authMechanism': 'SCRAM-SHA-1'
+        }
+
     }
+
 }
+
+# MongoDB routers.py 경로 추가
+DATABASE_APPS_MAPPING = {'mongos': 'mongodb'}
+DATABASE_ROUTERS = ['mongos.routers.TestRouter']
 
 # Local
 # DATABASES = {
@@ -135,7 +154,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -146,7 +164,6 @@ TIME_ZONE = 'Asia/Seoul'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
