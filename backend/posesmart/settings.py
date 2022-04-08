@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -23,12 +22,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-&pq!g+4=q=^g6gn*z%cj5ghf-h2c2v2da9ej&oxlt8bcjh(v#t'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
+
+# ========= Debug Mode =========
+# Local
 DEBUG = False
 
+# Deploy
+# DEBUG = False
+# ========= Debug Mode END =========
+
 ALLOWED_HOSTS = ['*']
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -38,13 +42,20 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # User Apps
     'accounts',
     'reports',
+    'detections',
+    'mongos',
 
+    # 3rd Party
     'rest_framework',
     'django_seed',
     'django_extensions',
     'corsheaders',
+
+    # AI
+    'numpy',
 ]
 
 MIDDLEWARE = [
@@ -56,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    # Cors
     'corsheaders.middleware.CorsMiddleware'
 ]
 
@@ -79,20 +91,50 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'posesmart.wsgi.application'
 
-
-# Database
+# ========= Database Mode =========
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# Deploy
 DATABASES = {
-    'default' : {
+    'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'posesmart',
         'USER': 'posesmart',
         'PASSWORD': '8888',
         'HOST': '3.38.193.177',
-        'PORT': '8888',
+        'PORT': '3306',
+    },
+    'mongodb': {
+        'ENGINE': 'djongo',
+        'NAME': 'mongos', # App Name
+        # 'HOST': '3.38.193.177',
+        # 'PORT': '27017',
+        'CLIENT': {
+            'host': '3.38.193.177',
+            # 'port': 27017,
+            # 'username': 'posesmart',
+            # 'password': '8888',
+            # 'authSource': 'admin',
+            # 'authMechanism': 'SCRAM-SHA-1'
+        }
+
     }
+
 }
+
+# MongoDB routers.py 경로 추가
+DATABASE_APPS_MAPPING = {'mongos': 'mongodb'}
+DATABASE_ROUTERS = ['mongos.routers.TestRouter']
+
+# Local
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+# ========= Database Mode END =========
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -112,7 +154,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -124,9 +165,10 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
+
+# =================STATIC FILES====================
 import os
 
 STATIC_URL = '/static/'
@@ -135,13 +177,16 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/static')
+
+# =================STATIC FILES END ====================
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# User Setting
+# ==================== User Setting ====================
 AUTH_USER_MODEL = 'accounts.User'
 
 REST_FRAMEWORK = {
@@ -153,7 +198,7 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1440),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
@@ -169,6 +214,10 @@ SIMPLE_JWT = {
 
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+# ==================== User Setting END ====================
 
-# CORS
+# ==================== CORS ====================
+
 CORS_ORIGIN_ALLOW_ALL = True
+
+# ==================== CORS END ====================
