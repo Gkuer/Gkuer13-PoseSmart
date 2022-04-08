@@ -14,6 +14,9 @@ RUN apt-get install libglib2.0-0
 # Copy src files
 COPY . .
 
+# Migrate
+RUN python manage.py migrate
+
 # Run 8000 port
 EXPOSE 8000
 
