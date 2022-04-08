@@ -1,63 +1,153 @@
-특화프로젝트 2주차
+# README
 
-# 세부 기획
+![스크린샷 2022-04-08 오전 10.12.00.png](image/1.png)
 
-**프로젝트 이름** : 
+### 포즈 스마트는 Vision AI를 통해,
 
-- POSESMART
+### 거북목 증후군과 안구 건조증에 도움을 줄 수 있는 서비스입니다.
 
-**학습 내용**
+# ✨기획 배경
 
-- CNN 딥러닝 모델
-- 이미지 분류
+- 점점 늘어가는 거북목 증후군 환자와 안구 건조증 환자
+- 코로나와 현대 사회의 컴퓨터 이용량 증가
+- 웹 캠의 보유 현황 증가
 
-**구현 기능 :** 
+# 🎈기획 의도
 
-- 거북목 감지(1st)
-- 눈 깜빡임(2nd)
-- 일정 시간이 경과했을 때마다 스트레칭 시간
-- 알람
-- 회원가입(소셜 로그인은 추가기능)
+- 거북목 자세와 눈 깜빡임은 본인이 인지하기 힘들기 때문에 웹 캠을 사용하여 알림을 울려 이용자들의 건강에 도움을 줄 수 있도록 함
 
-시작, 종료, 일시정지 버튼으로 일단 ,,  시간이 된다면 사람이 없는걸 감지해서 자동으로 일시 정지
+# 💭요구사항 정의서
 
-**추가** **기능 :** 
+![Untitled](image/Untitled.png)
 
-- 회원 기능
-- 타이머?
-- 공부 시간 측정
-- 날짜, 공부 시간 별 거북목 빈도 측정(횟수? 시간?) & 관리
-- to do list
-- 캘린더?
-- 스트레칭을 티쳐블 머신을 사용해서 검사?
-- 알람? 해당 시간에 알려줌
+# 💻프로젝트 기간 - [2022.02.21 ~ 2022.04.08]
 
-**기획 계기(당위성?) / 동기**
+# 🎇주요 기능
 
-- 최근 기술의 발달로 컴퓨터 작업을 하는 인구가 늘어났다. 오랜 시간 컴퓨터 작업을 하다 보면 거북목, 안구건조증 같은 건강 이상이 올 수 있는데 이를 예방하고 필요한 작업에 따른 기능들로 이용자에게 편의성을 줌
-- 거북목 증상은 계속해서 잘못된 자세를 풀어주는 것이 효과적인데 자세 교정을 위해 유저에게 알림을 보냄
-- 자세가 안 좋은 사람들은 본인은 알지 못하지만 본인의 자세를 알 수 있다면 교정에 도움이 될 수 있음.
-- 거북목 교정 시 키 1~2cm 증가,, 제발,,와우
+- 거북목 감지
+- 눈 깜빡임 감지
+- FaceID (신원 확인)
 
-**기술적/ 기능적 차별점** 
+# 🖥️개발환경
 
-- 
+### 🖱Front-end
 
-**필요할 것 같은 기술 스택**
+- Vue Cli (2.0)
+- Typescript
+- Vuetify
+- Axios
 
-- 프론트 백 이미지 데이터 전송
+### 🖱Back-end
 
-**필요 기획 문서**
+- Python, Django DRF, Mysql, Django ORM
+- Pytest
+- AWS(EC2), Nginx, Gunicorn
+- Git / Docker Hub / Jenkins / Docker
 
-- 요구사항 명세서([https://docs.google.com/spreadsheets/d/1CALKl-5_23D38gXp2wjiwgn7YVYxNXy2G5HPiaeymb4/edit?usp=sharing](https://docs.google.com/spreadsheets/d/1CALKl-5_23D38gXp2wjiwgn7YVYxNXy2G5HPiaeymb4/edit?usp=sharing))
-- [https://docs.google.com/spreadsheets/d/1NmVHMI1ixDoy9YB0KiaCucohvQqjoq2gOZPFvrPRn-E/edit#gid=0](https://docs.google.com/spreadsheets/d/1NmVHMI1ixDoy9YB0KiaCucohvQqjoq2gOZPFvrPRn-E/edit#gid=0),  요구사항명세서 2
-- API 설계서([https://docs.google.com/spreadsheets/d/1CALKl-5_23D38gXp2wjiwgn7YVYxNXy2G5HPiaeymb4/edit?usp=sharing](https://docs.google.com/spreadsheets/d/1CALKl-5_23D38gXp2wjiwgn7YVYxNXy2G5HPiaeymb4/edit?usp=sharing))
-- 와이어프레임([https://www.figma.com/file/iDqSdKsYmgbeDLhmBLq6Nr/1팀?node-id=0%3A1](https://www.figma.com/file/iDqSdKsYmgbeDLhmBLq6Nr/1%ED%8C%80?node-id=0%3A1))
-- ERD([https://www.erdcloud.com/d/nhXh8g6FjrYb6ktxu](https://www.erdcloud.com/d/nhXh8g6FjrYb6ktxu))
+# 💫서비스 아키텍처
 
-**참고 자료**
+![Untitled](image/Untitled%201.png)
 
-- 거북목 + 안구건조 예방 pjt : [https://github.com/eunjus/eye-neck-helper](https://github.com/eunjus/eye-neck-helper)
-- CNN을 이용한 거북목 자세 교정 관련 논문 [https://www.koreascience.or.kr/article/JAKO202022560454953.pdf](https://www.koreascience.or.kr/article/JAKO202022560454953.pdf)
-- 눈 깜빡임 [https://youtu.be/dJjzTo8_x3c](https://youtu.be/dJjzTo8_x3c)
-- 스트레칭 [https://www.korea.kr/news/healthView.do?newsId=148867027](https://www.korea.kr/news/healthView.do?newsId=148867027)
+---
+
+## 📌주요 개발
+
+### 🖱Front-end
+
+- Axios를 이용한 비동기 처리
+- setInterval을 통해 반복적인 통신 처리
+- 사용자 미디어 장치 접근을 통한 이미지 캡처
+
+### 🖱Back-end
+
+- Python을 활용한 AI 모델 서버 연동
+- Django DRF, Django ORM, Mysql를 이용한 서버 Application 개발
+- Pytest를 활용한 테스트 코드 구현 및 AI 응답시간 측정
+- AWS(EC2), Nginx, Gunicorn을 활용한 배포
+- Git / Docker Hub / Jenkins / Docker를 활용한 CI/CD
+
+# ✨코드 컨벤션
+
+```jsx
+**Code Convention Rule**
+    - 어려운 복잡한 단어나 헷갈리는 스펠링(10자이상) 은 우리끼리의 심볼 사용
+    - 심볼된 거는 카멜 표기법 대신 파스칼 표기법
+        
+        ex)  **psychological test → PCLtest**
+        
+         **mind test → mindTest**
+```
+
+# ✨Git 컨벤션
+
+```jsx
+feat : 새로운 기능에 대한 커밋
+modify : 기존 기능 수정에 대한 커밋
+fix : 버그 수정에 대한 커밋 
+build : 빌드 관련 파일 수정에 대한 커밋 
+chore : 코드 의미에 영향을 주지 않는 변경사항 (포맷, 세미콜론 누락, 공백 등)
+ci : CI 관련 설정 수정에 대한 커밋 
+docs : 문서 수정에 대한 커밋 
+style : 코드 스타일 혹은 포맷 등에 관한 커밋
+design : 화면 디자인에 관한 커밋
+refactor : 코드 리팩토링에 대한 커밋 
+test : 테스트 코드에 대한 커밋
+
+ex ) 
+**feat: 관심지역 알림 ON/OFF 기능 추가** 
+
+시군구의 알림을 각각 ON/OFF 할 수 있도록 기능을 추가함 
+
+출처: https://xtring-dev.tistory.com/entry/Git-규칙적인-Commit-메세지로-개발팀-협업하기-👾 [xtr
+```
+
+# 💡Git 브랜치 전략
+
+```jsx
+- **브랜치 전략**
+    - GIT Branch
+    - 브랜치 명 : **feature/역할(frontend/backend)/기능**
+```
+
+# 👨‍👦‍👦팀 구성
+
+**곽명필(팀장, FE)**
+
+**김두회(BE)**
+
+**박다원(FE)**
+
+**박소미(AI)**
+
+**이건희(BE)**
+
+**한상우(AI)**
+
+# 👨‍👩‍👧 협업 툴
+
+- Gitlab
+    
+    ![스크린샷 2022-04-08 오전 10.26.29.png](image/2.png)
+    
+- Jira
+    
+    ![스크린샷 2022-04-08 오전 10.20.45.png](image/4.png)
+    
+    지라를 통해 일정및 업무 관리와 협업을 진행했습니다. 스프린트는 일주일 단위로 진행하며, 일주일의 시작인 월요일에 그 주에 진행되어야 할 범위를 정하고 계획을 정했습니다.
+    
+- Notion
+    
+    ![스크린샷 2022-04-08 오전 10.27.11.png](image/3.png)
+    
+- Mattermost
+    
+    ![스크린샷 2022-04-08 오전 10.23.32.png](image/5.png)
+    
+- Webex
+    
+    ![스크린샷 2022-04-08 오전 10.28.26.png](image/6.png)
+    
+
+# 👨‍👩‍👧 Scrum
+
+매일 아침 10시에 팀 단위로 할 일을 20분 정도 공유하고 각자 팀으로 가서 지라에 이슈를 등록했습니다. 유연한 분위기에서 스크럼을 통해서 개발에 집중할 수 있는 팀 분위기를 만들었습니다.
