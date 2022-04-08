@@ -8,7 +8,7 @@ import base64
 import cv2 as cv
 from .tools import detections
 from django.contrib.auth import get_user_model
-
+from mongos.models import Mongo
 
 @api_view(['POST'])
 def check_neck(request):
@@ -19,6 +19,19 @@ def check_neck(request):
         # ================= Common ======================
         # Image
         image_base64 = serializer.data.get("blob_data")[22:]
+
+        # ======================== MongoDB ========================
+        mongo = Mongo.objects.filter(blob_base64={"user_pk": request.user.pk})
+
+        if mongo:
+            mongo[0].blob_base64[0].get("user_base64").append(image_base64)
+            mongo[0].save()
+        else:
+            mongo = Mongo()
+            mongo.blob_base64 = [{"user_pk":request.user.pk, "user_base64": [image_base64]}]
+            mongo.save()
+        # ======================== MongoDB END========================
+
         image_bytes = base64.b64decode(image_base64)
         image_1darray = np.frombuffer(image_bytes, np.uint8)
         image_3darray = cv.imdecode(image_1darray, cv.IMREAD_COLOR)
