@@ -1,7 +1,5 @@
 from django.db import models as django_models
-from django.conf import settings
-from djongo import models
-from accounts.models import User
+from djongo import models as djongo_models
 from django.contrib.postgres.fields import ArrayField
 
 class Blob(django_models.Model):
@@ -11,9 +9,9 @@ class Blob(django_models.Model):
     class Meta:
         abstract = True
 
-class Mongo(models.Model):
-    _id = models.ObjectIdField()
-    blob_base64 = models.ArrayField(null=True, model_container=Blob)
+class Mongo(djongo_models.Model):
+    _id = djongo_models.ObjectIdField()
+    blob_base64 = djongo_models.ArrayField(null=True, model_container=Blob)
 
     class Meta:
         app_label = 'mongos'

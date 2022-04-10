@@ -107,19 +107,10 @@ DATABASES = {
     'mongodb': {
         'ENGINE': 'djongo',
         'NAME': 'mongos', # App Name
-        # 'HOST': '3.38.193.177',
-        # 'PORT': '27017',
         'CLIENT': {
             'host': '3.38.193.177',
-            # 'port': 27017,
-            # 'username': 'posesmart',
-            # 'password': '8888',
-            # 'authSource': 'admin',
-            # 'authMechanism': 'SCRAM-SHA-1'
         }
-
     }
-
 }
 
 # MongoDB routers.py 경로 추가
